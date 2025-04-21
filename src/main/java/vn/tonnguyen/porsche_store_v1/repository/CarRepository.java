@@ -9,4 +9,5 @@ import java.util.List;
 public interface CarRepository extends JpaRepository<Car, Integer> {
     public List<Car> findAll();
     public Car findBySlug(String slug);
+
 }

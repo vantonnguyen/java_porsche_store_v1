@@ -26,7 +26,7 @@ public class Category {
     private String imageUrl;
 
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "category", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private List<CarModel> carModels;
 
 }

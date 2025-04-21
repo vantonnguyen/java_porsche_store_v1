@@ -24,4 +24,8 @@ public class CarServiceImpl implements CarService {
     public Car findBySlug(String slug) {
         return carRepository.findBySlug(slug);
     }
+    @Override
+    public Car save(Car car) {
+        return carRepository.save(car);
+    }
 }

@@ -54,7 +54,7 @@
 
         <div class="col" th:each="cat : ${categories}">
             <!-- Bọc toàn bộ card trong thẻ <a> -->
-            <a th:href="@{'/models/?category=' + ${cat.name}}" class="text-decoration-none text-dark">
+            <a th:href="@{'/models?category=' + ${cat.name}}" class="text-decoration-none text-dark">
                 <div class="card h-100">
                     <img th:src="@{'/images/porsche_store/categories/' + ${cat.imageUrl}}" alt="Car Image"
                          class="fixed-image">

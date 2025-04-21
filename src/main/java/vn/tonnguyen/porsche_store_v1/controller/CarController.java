@@ -19,14 +19,14 @@ public class CarController {
         this.carService = carService;
     }
 
-    @GetMapping("/{slug}")
+    @GetMapping("/{slug}")  //   http://localhost:8080/models/911-cerana
     public String getCarDetail(@PathVariable("slug") String slug, Model model) {
         Car car = carService.findBySlug(slug);
         if (car == null) {
-            return "error/404"; // Trang 404 nếu không tìm thấy xe
+            return "error/404";
         }
         model.addAttribute("car", car);
-        return "car/detail"; // Trả về trang chi tiết xe
+        return "car/detail";
     }
 
 }

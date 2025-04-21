@@ -18,7 +18,7 @@ public class ModelController {
         this.modelService = modelService;
     }
 
-    @GetMapping("/")  //   http://localhost:8080/models/?category=911
+    @GetMapping()  //   http://localhost:8080/models?category=911
     public String getModelByCategory(@RequestParam String category, Model model) {
         model.addAttribute("models", modelService.findByCategory_Name(category));
         return "model/models";

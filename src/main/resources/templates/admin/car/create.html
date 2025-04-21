@@ -3,118 +3,156 @@
 <head>
   <title>Create Car</title>
   <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+  <style>
+    #imagePreview {
+      max-width: 100%;
+      height: auto;
+      margin-top: 10px;
+      display: block;
+      border: 1px solid #ccc;
+      padding: 5px;
+    }
+  </style>
 </head>
 <body>
 <div class="container mt-4">
   <h2>Create New Car</h2>
 
-  <form th:action="@{/templates/admin/car/save}" th:object="${car}" method="post">
+  <form th:action="@{/admin/cars/create}" th:object="${car}" method="post" enctype="multipart/form-data">
     <div class="row">
-      <!-- Model -->
-      <div class="col-md-6 mb-3">
-        <label>Name</label>
-        <input type="text" th:field="*{name}" class="form-control" required>
+      <!-- Two-column form fields -->
+      <div class="col-md-8">
+        <div class="row g-3">
+          <!-- Name -->
+          <div class="col-md-6">
+            <label>Name</label>
+            <input type="text" th:field="*{name}" class="form-control" required>
+          </div>
+
+          <!-- Slug -->
+          <div class="col-md-6">
+            <label>Slug</label>
+            <input type="text" th:field="*{slug}" class="form-control" required>
+          </div>
+
+          <!-- Model -->
+          <div class="col-md-6">
+            <label>Model</label>
+            <select th:field="*{carModel.id}" class="form-control" required>
+              <option value="">-- Select Model --</option>
+              <option th:each="model : ${models}" th:value="${model.id}" th:text="${model.name}"></option>
+            </select>
+          </div>
+
+          <!-- Year -->
+          <div class="col-md-6">
+            <label>Year</label>
+            <input type="number" th:field="*{year}" class="form-control">
+          </div>
+
+          <!-- Price -->
+          <div class="col-md-6">
+            <label>Price</label>
+            <input type="number" step="0.01" th:field="*{price}" class="form-control" required>
+          </div>
+
+          <!-- Color -->
+          <div class="col-md-6">
+            <label>Color</label>
+            <input type="text" th:field="*{color}" class="form-control">
+          </div>
+
+          <!-- Engine -->
+          <div class="col-md-6">
+            <label>Engine</label>
+            <input type="text" th:field="*{engine}" class="form-control">
+          </div>
+
+          <!-- Horsepower -->
+          <div class="col-md-6">
+            <label>Horsepower</label>
+            <input type="number" th:field="*{horsepower}" class="form-control">
+          </div>
+
+          <!-- Max Speed -->
+          <div class="col-md-6">
+            <label>Max Speed</label>
+            <input type="number" th:field="*{maxSpeed}" class="form-control">
+          </div>
+
+          <!-- Transmission -->
+          <div class="col-md-6">
+            <label>Transmission</label>
+            <select th:field="*{transmission}" class="form-control">
+              <option th:each="t : ${T(vn.tonnguyen.porsche_store_v1.model.Car.Transmission).values()}"
+                      th:value="${t}" th:text="${t}">Transmission</option>
+            </select>
+          </div>
+
+          <!-- Fuel Type -->
+          <div class="col-md-6">
+            <label>Fuel Type</label>
+            <select th:field="*{fuelType}" class="form-control">
+              <option th:each="f : ${T(vn.tonnguyen.porsche_store_v1.model.Car.FuelType).values()}"
+                      th:value="${f}" th:text="${f}">Fuel</option>
+            </select>
+          </div>
+
+          <!-- Status -->
+          <div class="col-md-6">
+            <label>Status</label>
+            <select th:field="*{status}" class="form-control">
+              <option th:each="s : ${T(vn.tonnguyen.porsche_store_v1.model.Car.Status).values()}"
+                      th:value="${s}" th:text="${s}">Status</option>
+            </select>
+          </div>
+
+          <!-- Stock -->
+          <div class="col-md-6">
+            <label>Stock</label>
+            <input type="number" th:field="*{stock}" class="form-control">
+          </div>
+        </div>
       </div>
 
-      <!-- Slug -->
-      <div class="col-md-6 mb-3">
-        <label>Slug</label>
-        <input type="text" th:field="*{slug}" class="form-control" required>
+      <!-- Upload image & preview -->
+      <div class="col-md-4">
+        <div class="mb-3">
+          <label>Upload Image</label>
+          <input type="file" name="imageFile" class="form-control" accept="image/*" onchange="previewImage(event)">
+          <img id="imagePreview" src="#" alt="Image Preview" style="display: none;">
+        </div>
       </div>
+    </div>
 
-      <!-- Model -->
-      <div class="col-md-6 mb-3">
-        <label>Model</label>
-        <select th:field="*{carModel.id}" class="form-control" required>
-          <option value="">-- Select Model --</option>
-          <option th:each="model : ${models}" th:value="${model.id}" th:text="${model.name}"></option>
-        </select>
-      </div>
-
-      <!-- Year -->
-      <div class="col-md-6 mb-3">
-        <label>Year</label>
-        <input type="number" th:field="*{year}" class="form-control">
-      </div>
-
-      <!-- Price -->
-      <div class="col-md-6 mb-3">
-        <label>Price</label>
-        <input type="number" step="0.01" th:field="*{price}" class="form-control" required>
-      </div>
-
-      <!-- Color -->
-      <div class="col-md-6 mb-3">
-        <label>Color</label>
-        <input type="text" th:field="*{color}" class="form-control">
-      </div>
-
-      <!-- Engine -->
-      <div class="col-md-6 mb-3">
-        <label>Engine</label>
-        <input type="text" th:field="*{engine}" class="form-control">
-      </div>
-
-      <!-- Horsepower -->
-      <div class="col-md-6 mb-3">
-        <label>Horsepower</label>
-        <input type="number" th:field="*{horsepower}" class="form-control">
-      </div>
-
-      <!-- Max Speed -->
-      <div class="col-md-6 mb-3">
-        <label>Max Speed</label>
-        <input type="number" th:field="*{maxSpeed}" class="form-control">
-      </div>
-
-      <!-- Transmission -->
-      <div class="col-md-6 mb-3">
-        <label>Transmission</label>
-        <select th:field="*{transmission}" class="form-control">
-          <option th:each="t : ${T(vn.tonnguyen.porsche_store_v1.model.Car.Transmission).values()}"
-                  th:value="${t}" th:text="${t}">Transmission</option>
-        </select>
-      </div>
-
-      <!-- Fuel Type -->
-      <div class="col-md-6 mb-3">
-        <label>Fuel Type</label>
-        <select th:field="*{fuelType}" class="form-control">
-          <option th:each="f : ${T(vn.tonnguyen.porsche_store_v1.model.Car.FuelType).values()}"
-                  th:value="${f}" th:text="${f}">Fuel</option>
-        </select>
-      </div>
-
-      <!-- Status -->
-      <div class="col-md-6 mb-3">
-        <label>Status</label>
-        <select th:field="*{status}" class="form-control">
-          <option th:each="s : ${T(vn.tonnguyen.porsche_store_v1.model.Car.Status).values()}"
-                  th:value="${s}" th:text="${s}">Status</option>
-        </select>
-      </div>
-
-      <!-- Stock -->
-      <div class="col-md-6 mb-3">
-        <label>Stock</label>
-        <input type="number" th:field="*{stock}" class="form-control">
-      </div>
-
-      <!-- Image URL -->
-      <div class="col-md-6 mb-3">
-        <label>Image URL</label>
-        <input type="text" th:field="*{imageUrl}" class="form-control">
-      </div>
-
-      <!-- Description -->
+    <!-- Description & Submit -->
+    <div class="row mt-3">
       <div class="col-12 mb-3">
         <label>Description</label>
         <textarea th:field="*{description}" class="form-control" rows="3"></textarea>
       </div>
+      <div class="col-12">
+        <button type="submit" class="btn btn-primary">Create</button>
+      </div>
     </div>
-
-    <button type="submit" class="btn btn-primary">Create</button>
   </form>
+  <p th:text="${error}">Error message</p>
 </div>
+
+<script>
+  function previewImage(event) {
+    const reader = new FileReader();
+    const imageField = document.getElementById("imagePreview");
+
+    reader.onload = function () {
+      if (reader.readyState === 2) {
+        imageField.src = reader.result;
+        imageField.style.display = "block";
+      }
+    };
+
+    reader.readAsDataURL(event.target.files[0]);
+  }
+</script>
 </body>
 </html>
