@@ -7,5 +7,7 @@ import java.util.List;
 public interface CarService {
     public List<Car> findAll();
     public Car findBySlug(String slug);
+    public Car findById(int id);
     public Car save(Car car);
+    public String deleteById(int id);
 }

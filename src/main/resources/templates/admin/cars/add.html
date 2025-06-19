@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Create Car</title>
+  <title>Add Car</title>
   <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
   <style>
     #imagePreview {
@@ -16,71 +16,51 @@
 </head>
 <body>
 <div class="container mt-4">
-  <h2>Create New Car</h2>
+  <h2>Add Car</h2>
 
-  <form th:action="@{/admin/cars/create}" th:object="${car}" method="post" enctype="multipart/form-data">
+  <form th:action="@{/admin/cars/add}" th:object="${car}" method="post" enctype="multipart/form-data">
     <div class="row">
-      <!-- Two-column form fields -->
       <div class="col-md-8">
         <div class="row g-3">
-          <!-- Name -->
           <div class="col-md-6">
             <label>Name</label>
             <input type="text" th:field="*{name}" class="form-control" required>
           </div>
-
-          <!-- Slug -->
           <div class="col-md-6">
             <label>Slug</label>
             <input type="text" th:field="*{slug}" class="form-control" required>
           </div>
-
-          <!-- Model -->
           <div class="col-md-6">
             <label>Model</label>
             <select th:field="*{carModel.id}" class="form-control" required>
               <option value="">-- Select Model --</option>
-              <option th:each="model : ${models}" th:value="${model.id}" th:text="${model.name}"></option>
+              <option th:each="model : ${carModels}" th:value="${model.id}" th:text="${model.name}"></option>
             </select>
           </div>
-
-          <!-- Year -->
           <div class="col-md-6">
             <label>Year</label>
             <input type="number" th:field="*{year}" class="form-control">
           </div>
-
-          <!-- Price -->
           <div class="col-md-6">
             <label>Price</label>
             <input type="number" step="0.01" th:field="*{price}" class="form-control" required>
           </div>
-
-          <!-- Color -->
           <div class="col-md-6">
             <label>Color</label>
             <input type="text" th:field="*{color}" class="form-control">
           </div>
-
-          <!-- Engine -->
           <div class="col-md-6">
             <label>Engine</label>
             <input type="text" th:field="*{engine}" class="form-control">
           </div>
-
-          <!-- Horsepower -->
           <div class="col-md-6">
             <label>Horsepower</label>
             <input type="number" th:field="*{horsepower}" class="form-control">
           </div>
-
-          <!-- Max Speed -->
           <div class="col-md-6">
             <label>Max Speed</label>
             <input type="number" th:field="*{maxSpeed}" class="form-control">
           </div>
-
-          <!-- Transmission -->
           <div class="col-md-6">
             <label>Transmission</label>
             <select th:field="*{transmission}" class="form-control">
@@ -88,8 +68,6 @@
                       th:value="${t}" th:text="${t}">Transmission</option>
             </select>
           </div>
-
-          <!-- Fuel Type -->
           <div class="col-md-6">
             <label>Fuel Type</label>
             <select th:field="*{fuelType}" class="form-control">
@@ -97,8 +75,6 @@
                       th:value="${f}" th:text="${f}">Fuel</option>
             </select>
           </div>
-
-          <!-- Status -->
           <div class="col-md-6">
             <label>Status</label>
             <select th:field="*{status}" class="form-control">
@@ -106,16 +82,12 @@
                       th:value="${s}" th:text="${s}">Status</option>
             </select>
           </div>
-
-          <!-- Stock -->
           <div class="col-md-6">
             <label>Stock</label>
             <input type="number" th:field="*{stock}" class="form-control">
           </div>
         </div>
       </div>
-
-      <!-- Upload image & preview -->
       <div class="col-md-4">
         <div class="mb-3">
           <label>Upload Image</label>
@@ -124,15 +96,13 @@
         </div>
       </div>
     </div>
-
-    <!-- Description & Submit -->
     <div class="row mt-3">
       <div class="col-12 mb-3">
         <label>Description</label>
         <textarea th:field="*{description}" class="form-control" rows="3"></textarea>
       </div>
       <div class="col-12">
-        <button type="submit" class="btn btn-primary">Create</button>
+        <button type="submit" class="btn btn-primary">Add</button>
       </div>
     </div>
   </form>
@@ -150,7 +120,6 @@
         imageField.style.display = "block";
       }
     };
-
     reader.readAsDataURL(event.target.files[0]);
   }
 </script>

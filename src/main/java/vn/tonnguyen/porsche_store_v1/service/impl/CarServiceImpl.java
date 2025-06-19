@@ -11,7 +11,7 @@ import vn.tonnguyen.porsche_store_v1.service.interf.CarService;
 import java.util.List;
 @Service
 public class CarServiceImpl implements CarService {
-    CarRepository carRepository;
+    private CarRepository carRepository;
     @Autowired
     public CarServiceImpl(CarRepository carRepository) {
         this.carRepository = carRepository;
@@ -24,8 +24,19 @@ public class CarServiceImpl implements CarService {
     public Car findBySlug(String slug) {
         return carRepository.findBySlug(slug);
     }
+
+    @Override
+    public Car findById(int id) {
+        return carRepository.findById(id);
+    }
+
     @Override
     public Car save(Car car) {
         return carRepository.save(car);
+    }
+
+    @Override
+    public String deleteById(int id) {
+        return carRepository.deleteById(id);
     }
 }

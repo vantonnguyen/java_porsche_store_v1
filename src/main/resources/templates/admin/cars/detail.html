@@ -3,8 +3,6 @@
 <head th:replace="layout/header :: head('Car Detail')"></head>
 <body>
 
-<div th:replace="layout/navbar :: navbar"></div>
-
 <div class="container mt-5 mb-5">
   <h1 class="mb-4" th:text="${car.name}">Chi tiết xe</h1>
   <div class="row">
@@ -24,15 +22,12 @@
           <p><strong>Transmission:</strong> <span th:text="${car.transmission}">Automatic</span></p>
           <p><strong>Fuel Type:</strong> <span th:text="${car.fuelType}">ELECTRIC</span></p>
           <p><strong>Description:</strong> <span th:text="${car.description}">Sport car</span></p>
-
-          <a href="#" class="btn btn-primary">Thêm vào giỏ hàng</a>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<div th:replace="layout/footer :: footer"></div>
 
 <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
 

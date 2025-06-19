@@ -3,29 +3,16 @@
 <head th:replace="layout/header :: head('Cac dong xe')"></head>
 <body>
 
-<!-- Gọi navbar -->
 <div th:replace="layout/navbar :: navbar"></div>
-<!-- Nội dung chính -->
-<!-- Placeholder Section -->
-<div class="container-fluid my-5 bg-info">
-    <div class="p-5 text-center">
-        <h2>Tiêu đề dự phòng</h2>
-        <p>Mô tả nội dung dự phòng ở đây</p>
-    </div>
-</div>
 
 <div class="container mb-5">
-    <div th:each="model : ${models}" class="mb-5">
-        <!-- Tiêu đề model -->
+    <div th:each="model : ${carModels}" class="mb-5">
         <h3 th:text="${model.name}" class="mb-3">911</h3>
-
-        <!-- Dàn xe theo hàng ngang, tối đa 4 card -->
         <div class="row">
             <div class="col-md-3 mb-4" th:each="car : ${model.cars}">
-                <!-- Bọc toàn bộ card trong thẻ <a> -->
                 <a th:href="@{'/models/' + ${car.slug}}" class="text-decoration-none text-dark">
                     <div class="card h-100">
-                        <img class="card-img-top" th:src="@{'/images/porsche_store/cars/' + ${car.imageUrl}}"
+                        <img class="card-img-top" th:src="@{'/images/porsche_web_java/cars/' + ${car.imageUrl}}"
                              alt="Car Image">
                         <div class="card-body">
                             <h5 class="card-title" th:text="${car.name}">Tên xe</h5>
@@ -37,11 +24,9 @@
     </div>
 </div>
 
-
-<!-- Bootstrap Bundle (bao gồm Popper) -->
 <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
-<!-- Footer -->
+
 <div th:replace="layout/footer :: footer"></div>
-<!---->
+
 </body>
 </html>

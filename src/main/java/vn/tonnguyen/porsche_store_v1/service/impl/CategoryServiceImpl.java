@@ -9,7 +9,7 @@ import vn.tonnguyen.porsche_store_v1.service.interf.CategoryService;
 import java.util.List;
 @Service
 public class CategoryServiceImpl implements CategoryService {
-    CategoryRepository categoryRepository;
+    private CategoryRepository categoryRepository;
 
     @Autowired
     public CategoryServiceImpl( CategoryRepository categoryRepository) {

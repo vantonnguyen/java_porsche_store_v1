@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import vn.tonnguyen.porsche_store_v1.model.Car;
 import vn.tonnguyen.porsche_store_v1.service.interf.CarService;
-import vn.tonnguyen.porsche_store_v1.service.interf.ModelService;
 
 @Controller
 @RequestMapping("/models")

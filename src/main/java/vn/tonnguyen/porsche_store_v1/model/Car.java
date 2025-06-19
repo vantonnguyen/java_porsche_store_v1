@@ -23,7 +23,6 @@ public class Car {
     @Enumerated(EnumType.STRING)
     @Column(name="status")
     private Status status = Status.active;
-    // ENUMS
     public enum Status {
         active,
         discontinued
@@ -35,14 +34,10 @@ public class Car {
     @Column(name="slug",nullable = false, length = 150, unique = true)
     private String slug;
 
-    @ManyToOne
-    @JoinColumn(name = "model_id")
-    private CarModel carModel;
-
     @Column(name="year")
     private int year;
 
-    @Column(name="price",nullable = false, precision = 12, scale = 2)
+    @Column(name="price",nullable = false, precision = 20, scale = 2)
     private BigDecimal price;
 
     @Column(name="color",length = 100)
@@ -60,7 +55,6 @@ public class Car {
     @Enumerated(EnumType.STRING)
     @Column(name="transmission")
     private Transmission transmission;
-
     public enum Transmission {
         Automatic, Manual
     }
@@ -68,7 +62,6 @@ public class Car {
     @Enumerated(EnumType.STRING)
     @Column(name="fuel_type")
     private FuelType fuelType;
-
     public enum FuelType {
         Gasoline, Electric, Hybrid
     }
@@ -85,5 +78,9 @@ public class Car {
     @Column(name = "created_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime createdAt;
 
-//
+    @ManyToOne
+    @JoinColumn(name = "model_id")
+    private CarModel carModel;
+
+
 }

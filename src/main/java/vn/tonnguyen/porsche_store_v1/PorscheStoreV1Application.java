@@ -16,7 +16,7 @@ public class PorscheStoreV1Application implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/images/**")
-                .addResourceLocations("file:/E:/java_store/images/");
+                .addResourceLocations("file:/E:/");
     }
 
 }

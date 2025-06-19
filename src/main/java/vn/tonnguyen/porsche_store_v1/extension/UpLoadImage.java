@@ -3,10 +3,9 @@ package vn.tonnguyen.porsche_store_v1.extension;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.util.UUID;
 
 public class UpLoadImage {
-    private static final String UPLOAD_DIR = "E:/java_store/images/porsche_store/cars";
+    private static final String UPLOAD_DIR = "E:/porsche_web_java/cars/";
     public static String processUpload(MultipartFile file) {
         try {
             String fileName = file.getOriginalFilename();

@@ -6,21 +6,21 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import vn.tonnguyen.porsche_store_v1.service.interf.ModelService;
+import vn.tonnguyen.porsche_store_v1.service.interf.CarModelService;
 
 @Controller
 @RequestMapping("/models")
-public class ModelController {
-    private final ModelService modelService;
+public class CarModelController {
+    private final CarModelService carModelService;
 
     @Autowired
-    public ModelController(final ModelService modelService) {
-        this.modelService = modelService;
+    public CarModelController(final CarModelService carModelService) {
+        this.carModelService = carModelService;
     }
 
     @GetMapping()  //   http://localhost:8080/models?category=911
     public String getModelByCategory(@RequestParam String category, Model model) {
-        model.addAttribute("models", modelService.findByCategory_Name(category));
-        return "model/models";
+        model.addAttribute("carModels", carModelService.findByCategoryName(category));
+        return "car_model/list";
     }
 }

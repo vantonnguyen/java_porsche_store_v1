@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head th:replace="layout/header :: head('Delete car')"></head>
+
+<body>
+  <h3>Deleted a car successfully</h3>
+  <div class="container mt-5 mb-5">
+      <h1 class="mb-4" th:text="${car.name}">Chi tiết xe</h1>
+      <div class="row">
+          <div class="col-md-6">
+              <img th:src="@{'/images/porsche_web_java/cars/' + ${car.imageUrl}}" alt="Car Image" class="img-fluid" style="width: 100%; height: auto;">
+          </div>
+
+          <div class="col-md-6">
+              <div class="card h-100">
+                  <div class="card-body">
+                      <p><strong>Year:</strong> <span th:text="${car.year}">2024</span></p>
+                      <p><strong>Price:</strong> <span th:text="${#numbers.formatDecimal(car.price, 1, 'COMMA', 1, 'POINT')}">$120,000.0</span></p>
+                      <p><strong>Color:</strong> <span th:text="${car.color}">Red</span></p>
+                      <p><strong>Engine:</strong> <span th:text="${car.engine}">V8</span></p>
+                      <p><strong>Horsepower:</strong> <span th:text="${car.horsepower}">500</span></p>
+                      <p><strong>Max Speed:</strong> <span th:text="${car.maxSpeed}">300 km/h</span></p>
+                      <p><strong>Transmission:</strong> <span th:text="${car.transmission}">Automatic</span></p>
+                      <p><strong>Fuel Type:</strong> <span th:text="${car.fuelType}">ELECTRIC</span></p>
+                      <p><strong>Description:</strong> <span th:text="${car.description}">Sport car</span></p>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+</body>
+</html>

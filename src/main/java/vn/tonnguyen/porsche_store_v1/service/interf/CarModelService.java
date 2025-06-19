@@ -4,8 +4,8 @@ import vn.tonnguyen.porsche_store_v1.model.CarModel;
 
 import java.util.List;
 
-public interface ModelService {
+public interface CarModelService {
     public List<CarModel> findAll();
-    List<CarModel> findByCategory_Name(String name);
+    public List<CarModel> findByCategoryName(String name);
 
 }
