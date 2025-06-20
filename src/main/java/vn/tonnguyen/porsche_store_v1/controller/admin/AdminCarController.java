@@ -1,19 +1,14 @@
 package vn.tonnguyen.porsche_store_v1.controller.admin;
 
-import jakarta.servlet.annotation.MultipartConfig;
-import org.aspectj.bridge.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import vn.tonnguyen.porsche_store_v1.extension.UpLoadImage;
 import vn.tonnguyen.porsche_store_v1.model.Car;
 import vn.tonnguyen.porsche_store_v1.service.interf.CarService;
 import vn.tonnguyen.porsche_store_v1.service.interf.CarModelService;
-
-import java.awt.*;
 
 @Controller
 @RequestMapping("/admin/cars")
@@ -40,56 +35,57 @@ public class AdminCarController {
         return "admin/cars/create";
     }
 
-    @PostMapping("/create")
+    @PostMapping(value = "/create", consumes = "multipart/form-data")
     public String createCar(
-            Model model,@ModelAttribute("car") Car car,
-            @RequestParam("imageFile") MultipartFile imageFile) {
+            Model model, @ModelAttribute("car") Car car,
+            @RequestParam("imageFile") MultipartFile imageFile,
+            RedirectAttributes redirectAttributes) {
 
         try {
-            if (imageFile.isEmpty() || imageFile == null || !imageFile.getOriginalFilename().endsWith(".png") || !imageFile.getOriginalFilename().endsWith(".png")) {
-                model.addAttribute("error", "Please select a file");
-                model.addAttribute("carModels", carModelService.findAll());
-                return "admin/cars/create";
-            }
-            String fileName = UpLoadImage.processUpload(imageFile);
-            if (fileName == null) {
-                model.addAttribute("error", "Upload file failed");
-                model.addAttribute("carModels", carModelService.findAll());
-                return "admin/cars/create";
-            }
-            car.setImageUrl(fileName);
-            carService.save(car);
+            carService.create(car, imageFile);
+            redirectAttributes.addFlashAttribute("successMessage", "Car created successfully");
             return "redirect:/admin/cars/";
-        } catch (Exception ex) {
-            model.addAttribute("error", "Đã xảy ra lỗi khi lưu xe: " + ex.getMessage());
-            model.addAttribute("car", car);
+        } catch (Exception e) {
             model.addAttribute("carModels", carModelService.findAll());
+            model.addAttribute("car", car);
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             return "admin/cars/create";
         }
     }
 
-    @RequestMapping("/detail")
+    @GetMapping("/detail/{id}")
     public String showCarDetail(
             Model model,
-            @RequestParam int id) {
-        model.addAttribute("car",carService.findById(id));
+            @PathVariable("id") Integer id) {
+
+        model.addAttribute("car", carService.findById(id));
         return "admin/cars/detail";
     }
 
-    @RequestMapping("/delete")
+    @GetMapping("/delete/{id}")
     public String deleteCar(
             Model model,
-            @RequestParam int id) {
-
-        model.addAttribute("car",carService.findById(id));
-        carService.deleteById(id);
+            @PathVariable("id") Integer id) {
+        Car car = carService.findById(id);
+        model.addAttribute("car", car);
         return "admin/cars/delete";
     }
 
-    @RequestMapping("/update")
+    @PostMapping("/delete/{id}")
+    public String deleteCar(
+            Model model,
+            @PathVariable("id") Integer id,
+            RedirectAttributes redirectAttributes) {
+
+        carService.deleteById(id);
+        redirectAttributes.addFlashAttribute("successMessage", "Car deleted successfully");
+        return "redirect:/admin/cars/";
+    }
+
+    @GetMapping("/update/{id}")
     public String updateCar(
             Model model,
-            @RequestParam int id) {
+            @PathVariable("id") Integer id) {
 
         Car car = carService.findById(id);
         model.addAttribute("car", car);
@@ -97,7 +93,7 @@ public class AdminCarController {
         return "admin/cars/update";
     }
 
-    @PostMapping("/update")
+    @PostMapping(value = "/update", consumes = "multipart/form-data")
     public String updateCar(
             Model model,
             @ModelAttribute("car") Car car,
@@ -109,11 +105,10 @@ public class AdminCarController {
             redirectAttributes.addFlashAttribute("successMessage", "Car updated successfully!");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Update failed: " + e.getMessage());
-            return "redirect:/admin/cars/edit/" + car.getId();
+            return "redirect:/admin/cars/update/" + car.getId();
         }
         return "redirect:/admin/cars/";
     }
-
 
 
 }

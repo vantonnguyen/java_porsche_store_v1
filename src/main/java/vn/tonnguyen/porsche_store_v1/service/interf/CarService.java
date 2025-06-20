@@ -12,5 +12,7 @@ public interface CarService {
     public Car findById(int id);
     public Car save(Car car);
     public void deleteById(int id);
+
     public Car update(Car updatedCar, MultipartFile imageFile);
+    public Car create(Car car, MultipartFile imageFile);
 }

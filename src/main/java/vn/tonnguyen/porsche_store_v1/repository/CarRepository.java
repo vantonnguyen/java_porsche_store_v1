@@ -10,7 +10,7 @@ public interface CarRepository extends JpaRepository<Car, Integer> {
     public List<Car> findAll();
     public Car findBySlug(String slug);
     public Car findById(int id);
-//    public Car save(Car car);
+    public Car save(Car car);
     public void deleteById(int id);
 
 }

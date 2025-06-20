@@ -4,7 +4,7 @@ package vn.tonnguyen.porsche_store_v1.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import vn.tonnguyen.porsche_store_v1.extension.UpLoadImage;
+import vn.tonnguyen.porsche_store_v1.utils.ImageUploadUtil;
 import vn.tonnguyen.porsche_store_v1.model.Car;
 import vn.tonnguyen.porsche_store_v1.repository.CarRepository;
 import vn.tonnguyen.porsche_store_v1.service.interf.CarService;
@@ -16,10 +16,12 @@ import java.util.Optional;
 @Service
 public class CarServiceImpl implements CarService {
     private CarRepository carRepository;
+    private ImageUploadUtil imageUploadUtil;
 
     @Autowired
-    public CarServiceImpl(CarRepository carRepository) {
+    public CarServiceImpl(CarRepository carRepository,ImageUploadUtil imageUploadUtil) {
         this.carRepository = carRepository;
+        this.imageUploadUtil = imageUploadUtil;
     }
 
     @Override
@@ -77,7 +79,8 @@ public class CarServiceImpl implements CarService {
         // Upload ảnh mới nếu có
         if (imageFile != null && !imageFile.isEmpty()) {
             try {
-                String fileName = UpLoadImage.processUpload(imageFile);
+
+                String fileName = imageUploadUtil.saveImageFile(imageFile);
                 if (fileName != null && !fileName.isBlank()) {
                     existingCar.setImageUrl(fileName);
                 }
@@ -86,7 +89,27 @@ public class CarServiceImpl implements CarService {
             }
         }
 
-        return carRepository.save(existingCar);
+        return this.save(existingCar);
+    }
+
+    @Override
+    public Car create(Car car, MultipartFile imageFile) {
+        if (car == null) {
+            throw new IllegalArgumentException("Car object must not be null");
+        }
+        try {
+            String imageUrl = "default.png";
+            if(imageFile != null && !imageFile.isEmpty()) {
+                String fileName = imageUploadUtil.saveImageFile(imageFile);
+                if(fileName != null && !fileName.isBlank()) {
+                    imageUrl = fileName;
+                }
+            }
+            car.setImageUrl(imageUrl);
+            return this.save(car);
+        } catch (Exception ex) {
+            throw new RuntimeException("Failed to create car", ex);
+        }
     }
 
 
