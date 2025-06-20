@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"  th:lang="vi">
+<html xmlns:th="http://www.thymeleaf.org" th:lang="vi">
 <head>
     <title>Edit Car</title>
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"/>
@@ -17,10 +17,11 @@
 <body>
 <div class="container mt-4">
     <h2>Update Car</h2>
+    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
 
     <form th:action="@{/admin/cars/update}" th:object="${car}" method="post" enctype="multipart/form-data">
         <!--  THÊM HIDDEN ID -->
-        <input type="hidden" th:field="*{id}" />
+        <input type="hidden" th:field="*{id}"/>
 
         <div class="row">
             <div class="col-md-8">
@@ -69,21 +70,24 @@
                         <label>Transmission</label>
                         <select th:field="*{transmission}" class="form-control">
                             <option th:each="t : ${T(vn.tonnguyen.porsche_store_v1.model.Car.Transmission).values()}"
-                                    th:value="${t}" th:text="${t}">Transmission</option>
+                                    th:value="${t}" th:text="${t}">Transmission
+                            </option>
                         </select>
                     </div>
                     <div class="col-md-6">
                         <label>Fuel Type</label>
                         <select th:field="*{fuelType}" class="form-control">
                             <option th:each="f : ${T(vn.tonnguyen.porsche_store_v1.model.Car.FuelType).values()}"
-                                    th:value="${f}" th:text="${f}">Fuel</option>
+                                    th:value="${f}" th:text="${f}">Fuel
+                            </option>
                         </select>
                     </div>
                     <div class="col-md-6">
                         <label>Status</label>
                         <select th:field="*{status}" class="form-control">
                             <option th:each="s : ${T(vn.tonnguyen.porsche_store_v1.model.Car.Status).values()}"
-                                    th:value="${s}" th:text="${s}">Status</option>
+                                    th:value="${s}" th:text="${s}">Status
+                            </option>
                         </select>
                     </div>
                     <div class="col-md-6">
@@ -99,9 +103,10 @@
                     <input type="file" name="imageFile" class="form-control" accept="image/*"
                            onchange="previewImage(event)">
                     <img id="imagePreview"
-                         th:if="${car.imageUrl != null}"
-                         th:src="@{'/images/porsche_web_java/cars/' + ${car.imageUrl}}"
+                         th:if="${imageUrl != null}"
+                         th:src="@{'/images/porsche_web_java/cars/' + ${imageUrl}}"
                          alt="Image Preview"/>
+
                 </div>
             </div>
         </div>

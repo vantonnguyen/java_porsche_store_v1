@@ -1,9 +1,14 @@
 package vn.tonnguyen.porsche_store_v1.service.impl;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
+import vn.tonnguyen.porsche_store_v1.service.interf.ImageService;
 import vn.tonnguyen.porsche_store_v1.utils.ImageUploadUtil;
 import vn.tonnguyen.porsche_store_v1.model.Car;
 import vn.tonnguyen.porsche_store_v1.repository.CarRepository;
@@ -16,12 +21,14 @@ import java.util.Optional;
 @Service
 public class CarServiceImpl implements CarService {
     private CarRepository carRepository;
-    private ImageUploadUtil imageUploadUtil;
+    private ImageService imageService;
+
+    private static final Logger logger = LoggerFactory.getLogger(CarServiceImpl.class);
 
     @Autowired
-    public CarServiceImpl(CarRepository carRepository,ImageUploadUtil imageUploadUtil) {
+    public CarServiceImpl(CarRepository carRepository, ImageService imageService) {
         this.carRepository = carRepository;
-        this.imageUploadUtil = imageUploadUtil;
+        this.imageService = imageService;
     }
 
     @Override
@@ -35,8 +42,9 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public Car findById(int id) {
-        return carRepository.findById(id);
+    public Car findById(Integer id) {
+        return carRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Car not found"));
     }
 
     @Override
@@ -45,7 +53,7 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public void deleteById(int id) {
+    public void deleteById(Integer id) {
         carRepository.deleteById(id);
     }
 
@@ -54,13 +62,8 @@ public class CarServiceImpl implements CarService {
         if (updatedCar.getId() == null) {
             throw new IllegalArgumentException("Car ID must not be null");
         }
-
-        Optional<Car> existingOpt = carRepository.findById(updatedCar.getId());
-        if (existingOpt.isEmpty()) {
-            throw new RuntimeException("Car with id " + updatedCar.getId() + " not found");
-        }
-
-        Car existingCar = existingOpt.get();
+        Car existingCar = carRepository.findById(updatedCar.getId())
+                .orElseThrow(() -> new RuntimeException("Car with ID " + updatedCar.getId() + " not found"));
 
         existingCar.setName(updatedCar.getName());
         existingCar.setSlug(updatedCar.getSlug());
@@ -79,16 +82,13 @@ public class CarServiceImpl implements CarService {
         // Upload ảnh mới nếu có
         if (imageFile != null && !imageFile.isEmpty()) {
             try {
-
-                String fileName = imageUploadUtil.saveImageFile(imageFile);
-                if (fileName != null && !fileName.isBlank()) {
-                    existingCar.setImageUrl(fileName);
-                }
-            } catch (IOException e) {
-                throw new RuntimeException("Image upload failed", e);
+                String fileName = imageService.uploadCarImage(imageFile);
+                existingCar.setImageUrl(fileName);
+            } catch (Exception e) {
+                // Không dừng chương trình, có thể log lại
+                logger.error("Upload failed", e);
             }
         }
-
         return this.save(existingCar);
     }
 
@@ -97,19 +97,18 @@ public class CarServiceImpl implements CarService {
         if (car == null) {
             throw new IllegalArgumentException("Car object must not be null");
         }
-        try {
-            String imageUrl = "default.png";
-            if(imageFile != null && !imageFile.isEmpty()) {
-                String fileName = imageUploadUtil.saveImageFile(imageFile);
-                if(fileName != null && !fileName.isBlank()) {
-                    imageUrl = fileName;
-                }
+        if (imageFile != null && !imageFile.isEmpty()) {
+            try {
+                String fileName = imageService.uploadCarImage(imageFile);
+                car.setImageUrl(fileName);
+            } catch (Exception e) {
+                // Không dừng chương trình, có thể log lại
+                logger.error("Upload failed", e);
             }
-            car.setImageUrl(imageUrl);
-            return this.save(car);
-        } catch (Exception ex) {
-            throw new RuntimeException("Failed to create car", ex);
+        } else {
+            car.setImageUrl("default.png");
         }
+        return this.save(car);
     }
 
 

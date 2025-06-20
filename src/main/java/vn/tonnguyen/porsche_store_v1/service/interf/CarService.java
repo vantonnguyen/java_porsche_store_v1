@@ -1,5 +1,6 @@
 package vn.tonnguyen.porsche_store_v1.service.interf;
 
+import java.util.Optional;
 import org.springframework.web.multipart.MultipartFile;
 import vn.tonnguyen.porsche_store_v1.model.Car;
 
@@ -7,12 +8,12 @@ import vn.tonnguyen.porsche_store_v1.model.Car;
 import java.util.List;
 
 public interface CarService {
-    public List<Car> findAll();
-    public Car findBySlug(String slug);
-    public Car findById(int id);
-    public Car save(Car car);
-    public void deleteById(int id);
+    List<Car> findAll();
+    Car findBySlug(String slug);
+    Car save(Car car);
+    void deleteById(Integer id);
+    Car findById(Integer id);
 
-    public Car update(Car updatedCar, MultipartFile imageFile);
-    public Car create(Car car, MultipartFile imageFile);
+    Car update(Car updatedCar, MultipartFile imageFile);
+    Car create(Car car, MultipartFile imageFile);
 }

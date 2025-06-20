@@ -9,7 +9,7 @@ import java.io.IOException;
 
 @Component
 public class ImageUploadUtil {
-    @Value("${app.upload.dir}")
+    @Value("${app.upload.car.dir}")
     private String uploadDir;
     public  String saveImageFile(MultipartFile file) throws IOException {
         try {

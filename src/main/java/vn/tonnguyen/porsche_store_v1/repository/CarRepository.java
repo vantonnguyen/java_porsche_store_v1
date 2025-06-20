@@ -5,12 +5,17 @@ import org.springframework.stereotype.Repository;
 import vn.tonnguyen.porsche_store_v1.model.Car;
 
 import java.util.List;
+import java.util.Optional;
+
 @Repository
 public interface CarRepository extends JpaRepository<Car, Integer> {
-    public List<Car> findAll();
-    public Car findBySlug(String slug);
-    public Car findById(int id);
-    public Car save(Car car);
-    public void deleteById(int id);
+    //List<Car> findAll();
+    //Optional<Car> findById(Integer id);
+    //Car save(Car car);
+    //void deleteById(Integer id);
+    //boolean existsById(Integer id);
+    //long count();
+
+    Car findBySlug(String slug);
 
 }

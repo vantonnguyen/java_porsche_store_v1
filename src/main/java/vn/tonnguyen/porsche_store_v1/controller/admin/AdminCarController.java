@@ -48,7 +48,7 @@ public class AdminCarController {
         } catch (Exception e) {
             model.addAttribute("carModels", carModelService.findAll());
             model.addAttribute("car", car);
-            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            model.addAttribute("errorMessage", e.getMessage());
             return "admin/cars/create";
         }
     }
@@ -89,6 +89,7 @@ public class AdminCarController {
 
         Car car = carService.findById(id);
         model.addAttribute("car", car);
+        model.addAttribute("imageUrl", car.getImageUrl());
         model.addAttribute("carModels", carModelService.findAll());
         return "admin/cars/update";
     }
@@ -96,18 +97,24 @@ public class AdminCarController {
     @PostMapping(value = "/update", consumes = "multipart/form-data")
     public String updateCar(
             Model model,
-            @ModelAttribute("car") Car car,
+            @ModelAttribute("car") Car updatedCar,
             @RequestParam("imageFile") MultipartFile imageFile,
             RedirectAttributes redirectAttributes) {
 
         try {
-            carService.update(car, imageFile);
+            carService.update(updatedCar, imageFile);
             redirectAttributes.addFlashAttribute("successMessage", "Car updated successfully!");
+            return "redirect:/admin/cars/";
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Update failed: " + e.getMessage());
-            return "redirect:/admin/cars/update/" + car.getId();
+            model.addAttribute("errorMessage", e.getMessage());
+            Car oldCar = carService.findById(updatedCar.getId()); // Lấy bản gốc có ảnh
+            String imageUrl = (updatedCar.getImageUrl() == null) ? oldCar.getImageUrl() : updatedCar.getImageUrl();
+            model.addAttribute("imageUrl", imageUrl);
+            model.addAttribute("car", updatedCar);
+            model.addAttribute("carModels", carModelService.findAll());
+            return "admin/cars/update";
         }
-        return "redirect:/admin/cars/";
+
     }
 
 
