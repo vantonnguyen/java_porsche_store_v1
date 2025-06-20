@@ -4,6 +4,7 @@
 <body>
 
 <div class="container mt-5 mb-5">
+    <a th:href="@{'create'}">Add car</a>
     <table class="table table-striped table-bordered">
         <thead class="table-dark">
         <tr>
@@ -45,9 +46,6 @@
                         <a th:href="@{'update?id=' + ${car.id}}">Update</a>
                     </li>
                     <li>
-                        <a th:href="@{'edit?id=' + ${car.id}}">Edit</a>
-                    </li>
-                    <li>
                         <a th:href="@{'delete?id=' + ${car.id}}"
                            onclick="return confirm('Are you sure you want to delete this car?')">Delete</a>
                     </li>
@@ -56,6 +54,7 @@
         </tr>
         </tbody>
     </table>
+
 </div>
 
 <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
