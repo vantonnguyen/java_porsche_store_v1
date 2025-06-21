@@ -1,6 +1,5 @@
 package vn.tonnguyen.porsche_store_v1.service.impl;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,14 +8,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import vn.tonnguyen.porsche_store_v1.service.interf.ImageService;
-import vn.tonnguyen.porsche_store_v1.utils.ImageUploadUtil;
 import vn.tonnguyen.porsche_store_v1.model.Car;
 import vn.tonnguyen.porsche_store_v1.repository.CarRepository;
 import vn.tonnguyen.porsche_store_v1.service.interf.CarService;
-
-import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CarServiceImpl implements CarService {
@@ -79,6 +74,7 @@ public class CarServiceImpl implements CarService {
         existingCar.setStock(updatedCar.getStock());
         existingCar.setCarModel(updatedCar.getCarModel());
         existingCar.setStatus(updatedCar.getStatus());
+        existingCar.setImageUrl(existingCar.getImageUrl());
         // Upload ảnh mới nếu có
         if (imageFile != null && !imageFile.isEmpty()) {
             try {
@@ -97,6 +93,7 @@ public class CarServiceImpl implements CarService {
         if (car == null) {
             throw new IllegalArgumentException("Car object must not be null");
         }
+        car.setImageUrl("default.png");
         if (imageFile != null && !imageFile.isEmpty()) {
             try {
                 String fileName = imageService.uploadCarImage(imageFile);
@@ -105,8 +102,6 @@ public class CarServiceImpl implements CarService {
                 // Không dừng chương trình, có thể log lại
                 logger.error("Upload failed", e);
             }
-        } else {
-            car.setImageUrl("default.png");
         }
         return this.save(car);
     }

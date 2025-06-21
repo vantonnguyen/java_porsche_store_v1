@@ -7,5 +7,5 @@ import vn.tonnguyen.porsche_store_v1.model.Category;
 import java.util.List;
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
-    public List<Category> findAll();
+    //List<Category> findAll();
 }

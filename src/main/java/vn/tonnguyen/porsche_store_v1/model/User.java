@@ -1,0 +1,60 @@
+package vn.tonnguyen.porsche_store_v1.model;
+
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+
+import java.time.Instant;
+
+@Getter
+@Setter
+@Entity
+@Table(name = "users")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Integer id;
+
+    @Column(name = "username", nullable = false, length = 50)
+    private String username;
+
+    @Column(name = "password", nullable = false)
+    private String password;
+
+    @Column(name = "email", nullable = false, length = 100)
+    private String email;
+
+    @Column(name = "full_name", length = 100)
+    private String fullName;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name="sex")
+    private Sex sex;
+    public enum Sex {
+        male,
+        female
+    }
+
+    @Column(name = "phone", length = 20)
+    private String phone;
+
+    @Column(name = "address")
+    private String address;
+
+    @ColumnDefault("current_timestamp()")
+    @Column(name = "created_at")
+    private Instant createdAt;
+
+    @ColumnDefault("current_timestamp()")
+    @Column(name = "updated_at")
+    private Instant updatedAt;
+
+    @ColumnDefault("0")
+    @Column(name = "is_verified")
+    private Boolean isVerified;
+
+}

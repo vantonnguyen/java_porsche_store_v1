@@ -2,22 +2,23 @@ package vn.tonnguyen.porsche_store_v1.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
-@Entity
-@Table(name = "cars")
+
 @Getter
 @Setter
+@Entity
+@Table(name = "cars")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Car {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
+    @Column(name="id", nullable = false)
     private Integer id;
 
     @Enumerated(EnumType.STRING)
@@ -75,8 +76,9 @@ public class Car {
     @Column(name = "image_url", length = 100)
     private String imageUrl;
 
-    @Column(name = "created_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private LocalDateTime createdAt;
+    @ColumnDefault("current_timestamp()")
+    @Column(name = "created_at")
+    private Instant createdAt;
 
     @ManyToOne
     @JoinColumn(name = "model_id")

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{layout/header :: head('Update User')}"></head>
+<body>
+<div class="container mt-4">
+    <h2>Update Car</h2>
+    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+    <form th:action="@{/admin/users/update}" th:object="${user}" method="post" enctype="multipart/form-data">
+        <!--  THÊM HIDDEN ID -->
+        <input type="hidden" th:field="*{id}"/>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label>Username</label>
+                        <input type="text" th:field="*{username}" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Password</label>
+                        <input type="text" th:field="*{password}" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Email</label>
+                        <input type="text" th:field="*{email}" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <label>Full Name</label>
+                        <input type="text" th:field="*{fullName}" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <label>Sex</label>
+                        <select th:field="*{sex}" class="form-control">
+                            <option th:each="s : ${T(vn.tonnguyen.porsche_store_v1.model.User.Sex).values()}"
+                                    th:value="${s}" th:text="${s}">Sex
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Phone</label>
+                        <input type="text" th:field="*{phone}" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <label>Address</label>
+                        <input type="text" th:field="*{address}" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <label>Is verified</label>
+                        <select th:field="*{isVerified}" class="form-control">
+                            <option th:value="true" th:text="'Verified'"></option>
+                            <option th:value="false" th:text="'Not Verified'"></option>
+                        </select>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-12">
+            <button type="submit" class="btn btn-success">Update</button>
+            <a th:href="@{/admin/users/}" class="btn btn-secondary">Cancel</a>
+        </div>
+
+    </form>
+</div>
+
+
+</body>
+</html>
