@@ -45,10 +45,11 @@
                         <input type="text" th:field="*{address}" class="form-control">
                     </div>
                     <div class="col-md-6">
-                        <label>Is verified</label>
-                        <select th:field="*{isVerified}" class="form-control">
-                            <option th:value="true" th:text="'Verified'"></option>
-                            <option th:value="false" th:text="'Not Verified'"></option>
+                        <label>Status</label>
+                        <select th:field="*{status}" class="form-control">
+                            <option th:each="s : ${T(vn.tonnguyen.porsche_store_v1.model.User.Status).values()}"
+                                    th:value="${s}" th:text="${s}">Status
+                            </option>
                         </select>
                     </div>
 

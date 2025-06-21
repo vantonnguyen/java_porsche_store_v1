@@ -9,11 +9,11 @@ import java.time.Instant;
 @Getter
 @Setter
 @Entity
-@Table(name = "users")
+@Table(name = "staffs")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class User {
+public class Staff {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -25,15 +25,21 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "email", nullable = false, length = 100)
-    private String email;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private Staff.Role role;
+    public enum Role {
+        admin,
+        warehouse,
+        shipper
+    }
 
     @Column(name = "full_name", length = 100)
     private String fullName;
 
     @Enumerated(EnumType.STRING)
     @Column(name="sex")
-    private Sex sex;
+    private Staff.Sex sex;
     public enum Sex {
         male,
         female
@@ -42,7 +48,10 @@ public class User {
     @Column(name = "phone", length = 20)
     private String phone;
 
-    @Column(name = "address")
+    @Column(name = "CCCD", length = 20)
+    private String cccd;
+
+    @Column(name = "address", length = 100)
     private String address;
 
     @ColumnDefault("current_timestamp()")
@@ -55,11 +64,10 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     @Column(name="status")
-    private Status status;
+    private User.Status status;
     public enum Status {
         active,
         locked,
         disabled
     }
-
 }
