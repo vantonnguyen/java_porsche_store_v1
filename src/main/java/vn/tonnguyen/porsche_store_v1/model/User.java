@@ -19,21 +19,32 @@ public class User {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "username", nullable = false, length = 50)
+    @Column(name = "username", nullable = false, length = 50,unique = true)
     private String username;
 
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "email", nullable = false, length = 100)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private User.Role role;
+    public enum Role {
+        USER,
+        ADMIN,
+        WAREHOUSE,
+        SHIPPER
+    }
+
+    @Column(name = "email", nullable = false, length = 100,unique = true)
     private String email;
 
     @Column(name = "full_name", length = 100)
     private String fullName;
 
     @Enumerated(EnumType.STRING)
-    @Column(name="sex")
+    @Column(name = "sex")
     private Sex sex;
+
     public enum Sex {
         male,
         female
@@ -54,8 +65,9 @@ public class User {
     private Instant updatedAt;
 
     @Enumerated(EnumType.STRING)
-    @Column(name="status")
+    @Column(name = "status")
     private Status status;
+
     public enum Status {
         active,
         locked,

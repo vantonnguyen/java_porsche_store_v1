@@ -55,6 +55,7 @@ public class UserServiceImpl implements UserService {
         existingUser.setPhone(updatedUser.getPhone());
         existingUser.setAddress(updatedUser.getAddress());
         existingUser.setStatus(updatedUser.getStatus());
+        existingUser.setRole(updatedUser.getRole());
         if( !existingUser.getPassword().equals(updatedUser.getPassword())){
             existingUser.setPassword(updatedUser.getPassword());
         } else {

@@ -10,19 +10,17 @@
     <span th:text="${errorMessage}"></span>
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
-<div class="container mt-5 mb-5">
+<div class="container-fluid mt-5 ">
     <table class="table table-striped table-bordered">
         <thead class="table-dark">
         <tr>
             <th>ID</th>
             <th>Username</th>
             <th>Password</th>
+            <th>Role</th>
             <th>Email</th>
-            <th>Full Name</th>
-            <th>Sex</th>
             <th>Phone</th>
             <th>Address</th>
-            <th>Create At</th>
             <th>Update At</th>
             <th>Status</th>
             <th>Actions</th>
@@ -33,12 +31,10 @@
             <td th:text="${user.id}"></td>
             <td th:text="${user.username}"></td>
             <td th:text="${user.password}"></td>
+            <th th:text="${user.role}"></th>
             <td th:text="${user.email}"></td>
-            <td th:text="${user.fullName}"></td>
-            <td th:text="${user.sex}"></td>
             <td th:text="${user.phone}"></td>
             <td th:text="${user.address}"></td>
-            <td th:text="${user.createdAt}"></td>
             <td th:text="${user.updatedAt}"></td>
             <td th:text="${user.status}"></td>
             <td>

@@ -21,6 +21,14 @@
                         <input type="text" th:field="*{password}" class="form-control" required>
                     </div>
                     <div class="col-md-6">
+                        <label>Role</label>
+                        <select th:field="*{role}" class="form-control">
+                            <option th:each="s : ${T(vn.tonnguyen.porsche_store_v1.model.User.Role).values()}"
+                                    th:value="${s}" th:text="${s}">Role
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
                         <label>Email</label>
                         <input type="text" th:field="*{email}" class="form-control">
                     </div>

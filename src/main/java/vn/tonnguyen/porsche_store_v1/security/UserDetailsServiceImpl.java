@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import vn.tonnguyen.porsche_store_v1.model.User;
 import vn.tonnguyen.porsche_store_v1.repository.UserRepository;
 
-@Service("userDetailsService")
+@Service
 public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;

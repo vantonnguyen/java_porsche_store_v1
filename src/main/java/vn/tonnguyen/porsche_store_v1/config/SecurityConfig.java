@@ -13,7 +13,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import vn.tonnguyen.porsche_store_v1.security.UserDetailsServiceImpl;
+import vn.tonnguyen.porsche_store_v1.security.CustomSuccessHandler;
+
 
 import java.util.List;
 
@@ -21,33 +22,32 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfig {
     @Autowired
-    @Qualifier("userDetailsService")
     private UserDetailsService userDetailsService;
     @Autowired
-    @Qualifier("staffDetailsService")
-    private UserDetailsService staffDetailsService;
+    private CustomSuccessHandler customSuccessHandler;
 
-    //Cấu hình filter chain (luồng bảo mật)
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/admin/**").hasRole("admin")
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/warehouse/**").hasRole("WAREHOUSE")
+                        .requestMatchers("/shipper/**").hasRole("SHIPPER")
+                        .requestMatchers("/user/**").hasRole("USER")
                         .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
-                        .loginPage("/staff/login")                             // Trang GET: hiển thị form login
-                        .loginProcessingUrl("/staff/login")                    // URL POST: form sẽ submit vào đây
-                        .defaultSuccessUrl("/admin/dashboard", true)
-                        .failureUrl("/staff/login?error=true")
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .successHandler(customSuccessHandler)
+                        .failureUrl("/login?error=true")
                         .permitAll()
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/").permitAll()
                 );
-
         return http.build();
     }
 
@@ -57,11 +57,7 @@ public class SecurityConfig {
         userProvider.setUserDetailsService(userDetailsService);
         userProvider.setPasswordEncoder(passwordEncoder());
 
-        DaoAuthenticationProvider staffProvider = new DaoAuthenticationProvider();
-        staffProvider.setUserDetailsService(staffDetailsService);
-        staffProvider.setPasswordEncoder(passwordEncoder());
-
-        return new ProviderManager(List.of(staffProvider, userProvider));
+        return new ProviderManager(List.of(userProvider));
     }
 
     @Bean
