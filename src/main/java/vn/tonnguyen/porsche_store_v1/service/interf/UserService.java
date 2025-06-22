@@ -13,4 +13,5 @@ public interface UserService {
     void delete(Integer id);
 
     User update(User user);
+    User findByUsername(String username);
 }

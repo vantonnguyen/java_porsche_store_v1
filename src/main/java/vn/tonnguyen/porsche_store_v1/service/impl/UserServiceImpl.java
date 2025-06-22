@@ -20,7 +20,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findAll(){
+    public List<User> findAll() {
         return userRepository.findAll();
     }
 
@@ -37,7 +37,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findById(Integer id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found") );
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+    }
+
+    @Override
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
     }
 
     @Override
@@ -56,7 +62,7 @@ public class UserServiceImpl implements UserService {
         existingUser.setAddress(updatedUser.getAddress());
         existingUser.setStatus(updatedUser.getStatus());
         existingUser.setRole(updatedUser.getRole());
-        if( !existingUser.getPassword().equals(updatedUser.getPassword())){
+        if (!existingUser.getPassword().equals(updatedUser.getPassword())) {
             existingUser.setPassword(updatedUser.getPassword());
         } else {
             existingUser.setPassword(existingUser.getPassword());

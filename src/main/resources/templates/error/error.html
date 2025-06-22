@@ -10,6 +10,10 @@
     </style>
 </head>
 <body>
+<div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+    <span th:text="${errorMessage}"></span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
 <h1>Đã xảy ra lỗi</h1>
 <p>Trang không thể hiển thị do lỗi không xác định.</p>
 <a href="/">Quay về trang chủ</a>

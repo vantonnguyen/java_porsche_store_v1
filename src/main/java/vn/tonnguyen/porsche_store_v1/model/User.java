@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,7 +20,7 @@ public class User {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "username", nullable = false, length = 50,unique = true)
+    @Column(name = "username", nullable = false, length = 50, unique = true)
     private String username;
 
     @Column(name = "password", nullable = false)
@@ -28,6 +29,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     private User.Role role;
+
     public enum Role {
         USER,
         ADMIN,
@@ -35,7 +37,7 @@ public class User {
         SHIPPER
     }
 
-    @Column(name = "email", nullable = false, length = 100,unique = true)
+    @Column(name = "email", nullable = false, length = 100, unique = true)
     private String email;
 
     @Column(name = "full_name", length = 100)
@@ -73,5 +75,8 @@ public class User {
         locked,
         disabled
     }
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    private Cart cart;
 
 }
