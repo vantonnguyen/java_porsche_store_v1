@@ -16,6 +16,5 @@ public interface CarRepository extends JpaRepository<Car, Integer> {
     //boolean existsById(Integer id);
     //long count();
 
-    Car findBySlug(String slug);
-
+    Optional<Car> findBySlug(String slug);
 }

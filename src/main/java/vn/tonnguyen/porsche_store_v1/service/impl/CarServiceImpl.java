@@ -11,6 +11,7 @@ import vn.tonnguyen.porsche_store_v1.service.interf.ImageService;
 import vn.tonnguyen.porsche_store_v1.model.Car;
 import vn.tonnguyen.porsche_store_v1.repository.CarRepository;
 import vn.tonnguyen.porsche_store_v1.service.interf.CarService;
+
 import java.util.List;
 
 @Service
@@ -33,7 +34,8 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public Car findBySlug(String slug) {
-        return carRepository.findBySlug(slug);
+        return carRepository.findBySlug(slug)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Car not found"));
     }
 
     @Override

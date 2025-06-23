@@ -6,7 +6,15 @@
 <div th:replace="~{layout/navbar :: navbar}"></div>
 
 <div class="container mt-5 mb-5">
-    <h1 class="mb-4" th:text="${car.name}">Chi tiết xe</h1>
+    <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <span th:text="${successMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span th:text="${errorMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <h1 class="mb-4" th:text="${car.name}"></h1>
     <div class="row">
         <div class="col-md-6">
             <img th:src="@{'/images/porsche_web_java/cars/' + ${car.imageUrl}}" alt="Car Image" class="img-fluid"
@@ -26,8 +34,9 @@
                     <p><strong>Transmission:</strong> <span th:text="${car.transmission}">Automatic</span></p>
                     <p><strong>Fuel Type:</strong> <span th:text="${car.fuelType}">ELECTRIC</span></p>
                     <p><strong>Description:</strong> <span th:text="${car.description}">Sport car</span></p>
-
+                    <p><strong>Stock:</strong> <span th:text="${car.stock}">10</span></p>
                     <form th:action="@{/cart/add/{id}(id=${car.getId()}) }" method="post">
+                        <input type="number" name="quantity" value="1" min="1" th:max="${car.stock}"/>
                         <button type="submit">Add to cart</button>
                     </form>
 

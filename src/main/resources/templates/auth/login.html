@@ -7,6 +7,10 @@
 </head>
 <body>
 <div class="container mt-5">
+    <div th:if="${inforMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <span th:text="${inforMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
     <h2>Login</h2>
 
     <div th:if="${param.error}" class="alert alert-danger">

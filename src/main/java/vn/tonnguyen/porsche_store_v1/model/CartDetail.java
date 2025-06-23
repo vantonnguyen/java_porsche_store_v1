@@ -32,4 +32,8 @@ public class CartDetail {
     @JoinColumn(name = "car_id")
     private Car car;
 
+    public BigDecimal getSubTotalPrice() {
+        return price.multiply(BigDecimal.valueOf(quantity));
+    }
+
 }

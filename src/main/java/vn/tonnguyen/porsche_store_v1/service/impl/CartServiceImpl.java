@@ -6,15 +6,14 @@ import vn.tonnguyen.porsche_store_v1.model.Car;
 import vn.tonnguyen.porsche_store_v1.model.Cart;
 import vn.tonnguyen.porsche_store_v1.model.CartDetail;
 import vn.tonnguyen.porsche_store_v1.model.User;
-import vn.tonnguyen.porsche_store_v1.repository.CartDetailRepository;
 import vn.tonnguyen.porsche_store_v1.repository.CartRepository;
-import vn.tonnguyen.porsche_store_v1.repository.UserRepository;
 import vn.tonnguyen.porsche_store_v1.service.interf.CarService;
 import vn.tonnguyen.porsche_store_v1.service.interf.CartDetailService;
 import vn.tonnguyen.porsche_store_v1.service.interf.CartService;
 import vn.tonnguyen.porsche_store_v1.service.interf.UserService;
 
 import java.time.Instant;
+import java.util.List;
 
 @Service
 public class CartServiceImpl implements CartService {
@@ -55,6 +54,10 @@ public class CartServiceImpl implements CartService {
         }
         CartDetail existingDetail = cartDetailService.findByCartAndCarId(cart,carId);
         if (existingDetail != null) {
+            Integer quantityAfterAdd = existingDetail.getQuantity() + quantity;
+            if (quantityAfterAdd > existingDetail.getCar().getStock()) {
+                throw new RuntimeException("The quantity in your cart exceeds our car stock");
+            }
             existingDetail.setQuantity(existingDetail.getQuantity() + quantity);
             cartDetailService.save(existingDetail);
         } else {
@@ -66,6 +69,6 @@ public class CartServiceImpl implements CartService {
             newdetail.setPrice(car.getPrice());
             cartDetailService.save(newdetail);
         }
-
     }
+
 }

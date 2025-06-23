@@ -7,8 +7,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import vn.tonnguyen.porsche_store_v1.model.Cart;
 import vn.tonnguyen.porsche_store_v1.model.User;
 import vn.tonnguyen.porsche_store_v1.service.interf.UserService;
+
+import java.security.Principal;
 
 @Controller
 @RequestMapping("/user")
@@ -37,7 +41,6 @@ public class UserController {
             model.addAttribute("errorMessage", e.getMessage());
             return "error/error";
         }
-
-
     }
+
 }
