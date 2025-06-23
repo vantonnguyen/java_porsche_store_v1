@@ -10,7 +10,7 @@ import java.util.List;
 
 @Service
 public class CarModelServiceImpl implements CarModelService {
-    private CarModelRepository carModelRepository;
+    private final CarModelRepository carModelRepository;
     @Autowired
     public CarModelServiceImpl(CarModelRepository carModelRepository) {
         this.carModelRepository = carModelRepository;

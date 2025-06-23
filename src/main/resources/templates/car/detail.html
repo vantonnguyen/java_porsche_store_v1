@@ -27,8 +27,6 @@
                     <p><strong>Fuel Type:</strong> <span th:text="${car.fuelType}">ELECTRIC</span></p>
                     <p><strong>Description:</strong> <span th:text="${car.description}">Sport car</span></p>
 
-                    <a href="#" class="btn btn-primary">Add to cart</a>
-
                     <form th:action="@{/cart/add/{id}(id=${car.getId()}) }" method="post">
                         <button type="submit">Add to cart</button>
                     </form>

@@ -12,7 +12,7 @@ import vn.tonnguyen.porsche_store_v1.service.interf.UserService;
 @Controller
 @RequestMapping("/admin/users")
 public class AdminUserController {
-    private UserService userService;
+    private final  UserService userService;
 
     @Autowired
     public AdminUserController(UserService userService) {

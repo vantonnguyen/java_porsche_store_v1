@@ -15,8 +15,8 @@ import java.util.List;
 
 @Service
 public class CarServiceImpl implements CarService {
-    private CarRepository carRepository;
-    private ImageService imageService;
+    private final CarRepository carRepository;
+    private final ImageService imageService;
 
     private static final Logger logger = LoggerFactory.getLogger(CarServiceImpl.class);
 
