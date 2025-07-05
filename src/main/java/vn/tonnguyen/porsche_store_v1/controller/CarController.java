@@ -20,7 +20,7 @@ public class CarController {
         this.carService = carService;
     }
 
-    @GetMapping("/{slug}")  //   http://localhost:8080/models/911-cerana
+    @GetMapping("/{slug}")
     public String getCarDetail(@PathVariable("slug") String slug, Model model) {
         Car car = carService.findBySlug(slug);
         if (car == null) {

@@ -18,7 +18,7 @@ public class CarModelController {
         this.carModelService = carModelService;
     }
 
-    @GetMapping()  //   http://localhost:8080/models?category=911
+    @GetMapping()
     public String getModelByCategory(@RequestParam String category, Model model) {
         model.addAttribute("carModels", carModelService.findByCategoryName(category));
         return "car_model/list";

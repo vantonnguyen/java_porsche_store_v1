@@ -76,7 +76,7 @@ public class User {
         disabled
     }
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL,orphanRemoval = true, fetch = FetchType.EAGER)
     private Cart cart;
 
 }

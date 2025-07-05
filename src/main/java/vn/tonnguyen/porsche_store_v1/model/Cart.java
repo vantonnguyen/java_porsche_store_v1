@@ -6,6 +6,7 @@ import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -38,12 +39,12 @@ public class Cart {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    private List<CartDetail> cartDetails;
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL,orphanRemoval = true ,fetch = FetchType.LAZY)
+    private List<CartDetail> cartDetails = new ArrayList<>();
 
     public BigDecimal getTotalPrice() {
         return cartDetails.stream()
-                .map(detail -> detail.getPrice().multiply(BigDecimal.valueOf(detail.getQuantity())))
+                .map(line -> line.getPrice().multiply(BigDecimal.valueOf(line.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 

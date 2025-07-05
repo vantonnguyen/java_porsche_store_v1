@@ -9,12 +9,10 @@ import vn.tonnguyen.porsche_store_v1.model.Cart;
 import vn.tonnguyen.porsche_store_v1.model.CartDetail;
 import vn.tonnguyen.porsche_store_v1.model.User;
 import vn.tonnguyen.porsche_store_v1.service.interf.CarService;
-import vn.tonnguyen.porsche_store_v1.service.interf.CartDetailService;
 import vn.tonnguyen.porsche_store_v1.service.interf.CartService;
 import vn.tonnguyen.porsche_store_v1.service.interf.UserService;
 
 import java.security.Principal;
-import java.util.List;
 
 @Controller
 @RequestMapping("/cart")
@@ -22,14 +20,12 @@ public class CartController {
     private final CartService cartService;
     private final UserService userService;
     private final CarService carService;
-    private final CartDetailService cartDetailService;
 
     @Autowired
-    public CartController(CartService cartService, UserService userService, CarService carService, CartDetailService cartDetailService) {
+    public CartController(CartService cartService, UserService userService, CarService carService) {
         this.cartService = cartService;
         this.userService = userService;
         this.carService = carService;
-        this.cartDetailService = cartDetailService;
     }
 
     @GetMapping()
@@ -43,12 +39,12 @@ public class CartController {
             return "redirect:/login";
         }
         String username = principal.getName();
-        Cart cart = cartService.findByUser(userService.findByUsername(username));
+        Cart cart = cartService.findByUserId(userService.findIdByUsername(username));
         if (cart == null) {
             redirectAttributes.addFlashAttribute("inforMessage", "Your cart is empty,start shopping now");
             return "cart/list";
         } else {
-            model.addAttribute("cartDetails", cartDetailService.findByCart(cart));
+            model.addAttribute("cartDetails", cartService.findDetails(cart.getId()));
             return "cart/list";
         }
     }
@@ -81,26 +77,19 @@ public class CartController {
             @PathVariable("id") Integer carId,
             Principal principal,
             RedirectAttributes redirectAttributes) {
+        if (principal == null) {
+            redirectAttributes.addFlashAttribute("infoMessage", "You need to login first");
+            return "redirect:/login";
+        }
         try {
-            if (principal != null) {
                 String username = principal.getName();
-                User user = userService.findByUsername(username);
-                Cart cart = cartService.findByUser(user);
-                if (cart != null) {
-                    CartDetail detail = cartDetailService.findByCartAndCarId(cart, carId);
-                    if (detail != null) {
-                        cartDetailService.deleteByIdCustom(detail.getId()); // ✅ xóa qua ID
-                        redirectAttributes.addFlashAttribute("successMessage", "Successfully deleted from the cart");
-                        return "redirect:/cart";
-                    }
-                }
-            } else {
-                redirectAttributes.addFlashAttribute("infoMessage", "You need to login first");
-            }
+                cartService.deleteFromCart(username, carId);
+                redirectAttributes.addFlashAttribute("successMessage", "Deleted Successfully");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Error: " + e.getMessage());
         }
-        return "redirect:/";
+        return "redirect:/cart";
+
     }
 
 

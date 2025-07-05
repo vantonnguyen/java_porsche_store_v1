@@ -30,7 +30,7 @@ public class CarModel {
     private Category category;
 
 
-    @OneToMany(mappedBy = "carModel", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "carModel", cascade = CascadeType.ALL,orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Car> cars;
 
 }
