@@ -38,14 +38,14 @@ public class SecurityConfig {
                         .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
-                        .loginPage("/login")
-                        .loginProcessingUrl("/login")
+                        .loginPage("/auth/login")
+                        .loginProcessingUrl("/auth/login")
                         .successHandler(customSuccessHandler)
-                        .failureUrl("/login?error=true")
+                        .failureUrl("/auth/login?error=true")
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutUrl("/logout")
+                        .logoutUrl("/auth/logout")
                         .logoutSuccessUrl("/").permitAll()
                 );
         return http.build();

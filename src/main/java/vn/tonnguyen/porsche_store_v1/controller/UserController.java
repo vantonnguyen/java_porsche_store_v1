@@ -1,44 +1,138 @@
 package vn.tonnguyen.porsche_store_v1.controller;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import vn.tonnguyen.porsche_store_v1.model.Cart;
 import vn.tonnguyen.porsche_store_v1.model.User;
 import vn.tonnguyen.porsche_store_v1.service.interf.UserService;
 
-import java.security.Principal;
-
 @Controller
 @RequestMapping("/user")
+@Slf4j
 public class UserController {
     private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("/profile")
-    public String showProfile(Model model) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = "";
-
-        if (auth != null && auth.getPrincipal() instanceof UserDetails) {
-            UserDetails userDetails = (UserDetails) auth.getPrincipal();
-            username = userDetails.getUsername();
-        }
+    public String showProfile(
+            Model model,
+            @AuthenticationPrincipal UserDetails userDetails) {
 
         try {
-            User user = userService.findByUsername(username);
+            User user = userService.findByUsername(userDetails.getUsername());
+            if (user == null) {
+                model.addAttribute("errorMessage", "User not found!");
+                return "error/error";
+            }
             model.addAttribute("user", user);
             return "user/profile";
         } catch (Exception e) {
-            model.addAttribute("errorMessage", e.getMessage());
+            log.error("Error while retrieving user", e);
+            model.addAttribute("errorMessage", "Error while retrieving user!");
+            return "error/error";
+        }
+    }
+
+    @GetMapping("/update")
+    public String showEditForm(
+            Model model,
+            @AuthenticationPrincipal UserDetails userDetails) {
+
+        try {
+            User user = userService.findByUsername(userDetails.getUsername());
+            if (user == null) {
+                model.addAttribute("errorMessage", "User not found!");
+                return "error/error";
+            }
+            model.addAttribute("user", user);
+            return "user/update";
+        } catch (Exception e) {
+            log.error("Error while updating user", e);
+            model.addAttribute("errorMessage", "Error while updating user!");
+            return "error/error";
+        }
+    }
+
+    @PostMapping("/update")
+    public String processEditForm(
+            Model model,
+            @ModelAttribute("user") User updatedUser,
+            @AuthenticationPrincipal UserDetails userDetails,
+            RedirectAttributes redirectAttributes) {
+
+        try {
+            User user = userService.findByUsername(userDetails.getUsername());
+            if (user == null) {
+                model.addAttribute("errorMessage", "User not found!");
+                return "error/error";
+            }
+            user.setEmail(updatedUser.getEmail());
+            user.setAddress(updatedUser.getAddress());
+            user.setPhone(updatedUser.getPhone());
+            user.setFullName(updatedUser.getFullName());
+            userService.update(user);
+            redirectAttributes.addFlashAttribute("successMessage", "User updated successfully!");
+            return "redirect:/user/profile";
+        } catch (Exception e) {
+            log.error("Error while updating user", e);
+            model.addAttribute("errorMessage", "Error while updating user!");
+            return "error/error";
+        }
+    }
+
+    @GetMapping("/change-password")
+    public String showChangePasswordForm(
+            Model model,
+            @AuthenticationPrincipal UserDetails userDetails) {
+
+        try {
+            User user = userService.findByUsername(userDetails.getUsername());
+            if (user == null) {
+                model.addAttribute("errorMessage", "User not found!");
+                return "error/error";
+            }
+            model.addAttribute("user", user);
+            return "user/change-password";
+        } catch (Exception e) {
+            log.error("Error while changing password", e);
+            model.addAttribute("errorMessage", "Error while changing password!");
+            return "error/error";
+        }
+    }
+
+    @PostMapping("/change-password")
+    public String processChangePasswordForm(
+            Model model,
+            @ModelAttribute("user") User updatedUser,
+            @AuthenticationPrincipal UserDetails userDetails,
+            RedirectAttributes redirectAttributes) {
+
+        try {
+            User user = userService.findByUsername(userDetails.getUsername());
+            if (user == null) {
+                model.addAttribute("errorMessage", "User not found!");
+                return "error/error";
+            }
+            user.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+            userService.update(user);
+            redirectAttributes.addFlashAttribute("successMessage", "Password changed successfully!");
+            return "redirect:/user/profile";
+        } catch (Exception e) {
+            log.error("Error while updating user", e);
+            model.addAttribute("errorMessage", "Error while changing password!");
             return "error/error";
         }
     }

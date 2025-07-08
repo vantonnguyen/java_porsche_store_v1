@@ -97,10 +97,7 @@ public class CartServiceImpl implements CartService {
     @Override
     public long countItemsByUserId(Integer userId) {
         Cart cart = this.findByUserId(userId);
-        if (cart == null) {
-            throw new RuntimeException("Cart not found");
-        }
-        return cart.getCartDetails().size();
+        return (cart != null) ? cart.getCartDetails().size() : 0;
     }
 
 }

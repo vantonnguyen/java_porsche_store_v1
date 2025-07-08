@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{layout/header :: head('Update')}"></head>
+<body>
+
+<div th:replace="~{layout/navbar :: navbar}"></div>
+
+<div class="container mt-5">
+    <form th:action="@{/user/update}" th:object="${user}" th:method="post" class="w-50 mx-auto">
+        <div class="col-6 w-50 mx-auto">
+            <h4 class="text-center mb-3">Update</h4>
+            <div class="mb-2">
+                <label>Email(*)</label>
+                <input type="email" th:field="*{email}" class="form-control" required placeholder="Email">
+            </div>
+            <div class="mb-2">
+                <label>Full name</label>
+                <input type="text" th:field="*{fullName}" class="form-control">
+            </div>
+            <div class="mb-2">
+                <label>Phone number</label>
+                <input type="text" th:field="*{phone}" class="form-control">
+            </div>
+            <div class="mb-2">
+                <label>Address</label>
+                <input type="text" th:field="*{address}" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Confirm</button>
+        </div>
+    </form>
+</div>
+
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+
+</body>
+</html>

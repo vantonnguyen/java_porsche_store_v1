@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import vn.tonnguyen.porsche_store_v1.service.interf.CartService;
 import vn.tonnguyen.porsche_store_v1.service.interf.UserService;
 import org.springframework.ui.Model;
-import vn.tonnguyen.porsche_store_v1.model.Cart;
 
 import java.security.Principal;
 
@@ -28,13 +27,9 @@ public class GlobalControllerAdvice {
             Principal principal) {
 
         long itemCount = 0;
-        try {
-            if (principal != null) {
-                String username = principal.getName();
-                itemCount = cartService.countItemsByUserId(userService.findByUsername(username).getId());
-            }
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e);
+        if (principal != null) {
+            String username = principal.getName();
+            itemCount = cartService.countItemsByUserId(userService.findByUsername(username).getId());
         }
         model.addAttribute("itemCount", itemCount);
     }

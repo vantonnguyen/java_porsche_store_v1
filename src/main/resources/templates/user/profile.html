@@ -11,19 +11,21 @@
 
             <div class="card shadow-lg rounded">
                 <div class="card-header bg-dark text-white text-center">
-                    <h4 class="mb-0">Thông tin tài khoản</h4>
+                    <h4 class="mb-0">Account information</h4>
                 </div>
 
                 <div class="card-body">
                     <p><strong>Username:</strong> <span th:text="${user.username}">username</span></p>
+                    <p><strong>Full name:</strong> <span th:text="${user.fullName}"></span></p>
                     <p><strong>Email:</strong> <span th:text="${user.email}">email</span></p>
                     <p><strong>Phone:</strong> <span th:text="${user.phone}">phone</span></p>
                     <p><strong>Address:</strong> <span th:text="${user.address}">address</span></p>
+                    <p><strong>Create at:</strong> <span th:text="${user.createdAt}"></span></p>
                 </div>
 
                 <div class="card-footer text-center">
-                    <a th:href="@{/user/edit}" class="btn btn-primary me-2">Sửa thông tin</a>
-                    <a th:href="@{/user/change-password}" class="btn btn-warning">Đổi mật khẩu</a>
+                    <a th:href="@{/user/update}" class="btn btn-primary me-2">Edit</a>
+                    <a th:href="@{/user/change-password}" class="btn btn-warning">Change password</a>
                 </div>
             </div>
 

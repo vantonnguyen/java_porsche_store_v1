@@ -6,9 +6,13 @@
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
 </head>
 <body>
-<div class="container mt-5">
+<div class="container mt-5 w-50 mx-auto ">
     <div th:if="${inforMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
         <span th:text="${inforMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <span th:text="${successMessage}"></span>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     <h2>Login</h2>
@@ -17,7 +21,7 @@
         Invalid username or password!
     </div>
 
-    <form th:action="@{/login}" method="post">
+    <form th:action="@{/auth/login}" method="post" >
         <div class="w-50">
             <label for="username">Username:</label>
             <input type="text" class="form-control" name="username" required />
@@ -28,8 +32,8 @@
         </div>
         <button type="submit" class="btn btn-primary">Login</button>
         <div class="w-50 text-center">
-            <a th:href="@{/forgot-password}">Forgot Password?</a> |
-            <a th:href="@{/register}">Register</a>
+            <a th:href="@{/auth/forgot-password}">Forgot Password?</a> |
+            <a th:href="@{/auth/sign-up}">Sign up</a>
         </div>
     </form>
 </div>
