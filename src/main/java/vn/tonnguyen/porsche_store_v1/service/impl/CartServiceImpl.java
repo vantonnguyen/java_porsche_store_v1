@@ -21,7 +21,6 @@ public class CartServiceImpl implements CartService {
     private final UserService userService;
     private final CarService carService;
 
-
     @Autowired
     public CartServiceImpl(CartRepository cartRepository, UserService userService, CarService carService) {
         this.cartRepository = cartRepository;
@@ -64,7 +63,7 @@ public class CartServiceImpl implements CartService {
         if (line != null) {
             Integer newQty = line.getQuantity() + quantity;
             if (newQty > line.getCar().getStock()) {
-                throw new RuntimeException("The quantity in your cart exceeds our car stock");
+                throw new IllegalArgumentException("The quantity in your cart exceeds our car stock");
             }
             line.setQuantity(newQty);
         } else {
@@ -98,6 +97,26 @@ public class CartServiceImpl implements CartService {
     public long countItemsByUserId(Integer userId) {
         Cart cart = this.findByUserId(userId);
         return (cart != null) ? cart.getCartDetails().size() : 0;
+    }
+
+    @Override
+    @Transactional
+    public void updateQuantity(String username, Integer carId, int delta) {
+        User user = userService.findByUsername(username);
+        Cart cart = this.findByUserId(user.getId());
+        CartDetail line = cart.getCartDetails().stream()
+                .filter(l -> l.getCar().getId().equals(carId))
+                .findFirst().orElse(null);
+        if (line == null) {
+            throw new RuntimeException("Cart not found");
+        }
+        int newQty = line.getQuantity() + delta;
+        if(newQty == 0) return;
+        if (newQty > line.getCar().getStock()) {
+            throw new IllegalArgumentException("The quantity in your cart exceeds our car stock");
+        } else{
+            line.setQuantity(newQty);
+        }
     }
 
 }

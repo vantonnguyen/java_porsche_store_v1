@@ -33,7 +33,19 @@
         <tr th:each="detail,iterStat : ${cartDetails}">
             <td th:text="${iterStat.index + 1}"></td>
             <td th:text="${detail.car.name}"></td>
-            <td th:text="${detail.quantity}"></td>
+            <td>
+                <form th:action="@{/cart/update/{id}(id=${detail.car.id})}" method="post"
+                      class="d-inline">
+                    <input type="hidden" name="delta" value="-1"/>
+                    <button class="btn btn-sm btn-outline-secondary" type="submit">−</button>
+                </form>
+                <span th:text="${detail.quantity}" class="mx-2"></span>
+                <form th:action="@{/cart/update/{id}(id=${detail.car.id})}" method="post"
+                      class="d-inline">
+                    <input type="hidden" name="delta" value="1"/>
+                    <button class="btn btn-sm btn-outline-secondary" type="submit">+</button>
+                </form>
+            </td>
             <td th:text="${#numbers.formatDecimal(detail.car.price, 1, 'COMMA', 1, 'POINT')}">120,000.0</td>
             <td th:text="${#numbers.formatDecimal(detail.getSubTotalPrice(), 1, 'COMMA', 1, 'POINT')}">120,000.0</td>
             <td>
@@ -49,6 +61,21 @@
         </tr>
         </tbody>
     </table>
+    <div>
+        <table>
+            <tr>
+                <th>Total:</th>
+                <td th:text="${#numbers.formatDecimal(cart.totalPrice,1,'COMMA',1,'POINT')}"
+                    class="pe-4"></td>
+                <td>
+                <td>
+                    <form th:action="@{/order/create/{id}(id=${cart.id})}" th:method="post">
+                        <button th:type="submit">Order</button>
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </div>
 </div>
 
 <script th:src="@{/js/bootstrap.bundle.min.js}"></script>

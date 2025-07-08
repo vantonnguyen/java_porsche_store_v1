@@ -12,4 +12,5 @@ public interface CartService {
     List<CartDetail> findDetails(Integer cartId);
     void deleteFromCart(String username, Integer carId);
     long countItemsByUserId(Integer userId);
+    void updateQuantity(String username, Integer carId, int delta);
 }
