@@ -17,6 +17,84 @@
     <span th:text="${inforMessage}"></span>
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
+<div class="container my-4">
+    <div class="row">
+        <div class="col-lg-8">
+            <table class="table table-bordered table-sm align-middle">
+                <thead class="table-light">
+                <tr>
+                    <th class="text-center" style="width: 50px;">#</th>
+                    <th>Car Name</th>
+                    <th class="text-center" style="width: 100px;">Quantity</th>
+                    <th class="text-end" style="width: 150px;">Price</th>
+                    <th class="text-end" style="width: 150px;">Subtotal</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item, iterStat : ${items}">
+                    <td class="text-center" th:text="${iterStat.index + 1}">1</td>
+                    <td th:text="${item.car.name}">Car Name</td>
+                    <td class="text-center" th:text="${item.quantity}">1</td>
+                    <td class="text-end"
+                        th:text="${#numbers.formatDecimal(item.price, 1, 'COMMA', 1, 'POINT')}">
+                        10,000.0
+                    </td>
+                    <td class="text-end"
+                        th:text="${#numbers.formatDecimal(item.subTotalPrice, 1, 'COMMA', 1, 'POINT')}">
+                        10,000.0
+                    </td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr class="fw-semibold">
+                    <td colspan="4" class="text-end">Total:</td>
+                    <td class="text-end"
+                        th:text="${#numbers.formatDecimal(cart.totalPrice, 1, 'COMMA', 1, 'POINT')}">
+                        30,000.0
+                    </td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div class="col-lg-4">
+            <form th:action="@{/order/create}" th:object="${user}" method="post" class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title text-center mb-3">Customer Information</h5>
+                    <div class="mb-2">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" th:field="*{fullName}" class="form-control" >
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Phone Number</label>
+                        <input type="text" th:field="*{phone}" class="form-control" >
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Delivery Address</label>
+                        <input type="text" th:field="*{address}" class="form-control" >
+                    </div>
+                    <!-- Payment method -->
+                    <div class="mb-3">
+                        <label class="form-label d-block mb-1">Payment Method</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="paymentMethod" id="cod"
+                                   value="COD" checked>
+                            <label class="form-check-label" for="cod">Cash on Delivery (COD)</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="paymentMethod" id="vnpay"
+                                   value="VNPAY">
+                            <label class="form-check-label" for="vnpay">VNPay</label>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Confirm Order</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+
 
 <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
 <script th:src="@{/js/bootstrap.bundle.min.js}"></script>

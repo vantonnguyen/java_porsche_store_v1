@@ -1,6 +1,7 @@
 package vn.tonnguyen.porsche_store_v1.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -22,4 +23,7 @@ public interface CartRepository extends JpaRepository<Cart, Integer> {
     Optional<Cart> findByUserId(@Param("userId") Integer userId);
     @Query("select cd from CartDetail cd where cd.cart.id = :cartId")
     List<CartDetail> findDetails(@Param("cartId") Integer cartId);
+    @Modifying
+    @Query("delete from CartDetail d where d.cart.id = :cartId")
+    void deleteAllCartDetailsByCartId(@Param("cartId") Integer cartId);
 }

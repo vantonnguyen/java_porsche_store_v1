@@ -108,5 +108,9 @@ public class CarServiceImpl implements CarService {
         return this.save(car);
     }
 
+    @Override
+    public void decreaseStockAfterOrder(Integer carId,int quantity) {
+        carRepository.decreaseStockAfterOrder(carId,quantity);
+    }
 
 }

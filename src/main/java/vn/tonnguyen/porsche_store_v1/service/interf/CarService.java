@@ -16,4 +16,6 @@ public interface CarService {
 
     Car update(Car updatedCar, MultipartFile imageFile);
     Car create(Car car, MultipartFile imageFile);
+    void decreaseStockAfterOrder(Integer carId,int quantity);
+
 }

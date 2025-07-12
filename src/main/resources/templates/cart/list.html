@@ -68,11 +68,9 @@
                 <td th:text="${#numbers.formatDecimal(cart.totalPrice,1,'COMMA',1,'POINT')}"
                     class="pe-4"></td>
                 <td>
-                <td>
-                    <form th:action="@{/order/create/{id}(id=${cart.id})}" th:method="post">
-                        <button th:type="submit">Order</button>
-                    </form>
-                </td>
+                <th:block th:if="${not #lists.isEmpty(cartDetails)}">
+                    <a th:href="@{/order/create}"><button>Order</button></a>
+                </th:block>
             </tr>
         </table>
     </div>
