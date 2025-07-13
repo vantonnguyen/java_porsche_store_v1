@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{layout/header :: head('Details')}"></head>
+<body>
+
+<div th:replace="~{layout/navbar :: navbar}"></div>
+
+<div th:if="${successMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+    <span th:text="${successMessage}"></span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+<div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+    <span th:text="${errorMessage}"></span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+<div th:if="${inforMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+    <span th:text="${inforMessage}"></span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+<div class="container my-4">
+    <div class="row">
+        <div class="col-lg-8">
+            <table class="table table-bordered table-sm align-middle">
+                <thead class="table-light">
+                <tr>
+                    <th class="text-center" style="width: 50px;">#</th>
+                    <th class="text-center" style="width: 100px;">Car Name</th>
+                    <th class="text-center" style="width: 100px;">Price</th>
+                    <th class="text-end" style="width: 150px;">Quantity</th>
+                    <th class="text-end" style="width: 150px;">Sub total</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="detail,iterStat : ${orderDetail}">
+                    <td class="text-center" th:text="${iterStat.index + 1}">1</td>
+                    <td class="text-center" th:text="${detail.carName}"></td>
+                    <td class="text-end"
+                        th:text="${#numbers.formatDecimal(detail.price, 1, 'COMMA', 1, 'POINT')}">
+                    </td>
+                    <td class="text-center" th:text="${detail.quantity}"></td>
+                    <td class="text-end"
+                        th:text="${#numbers.formatDecimal(detail.getSubTotal(), 1, 'COMMA', 1, 'POINT')}">
+                    </td>
+                </tr>
+                </tbody>
+                <tfoot></tfoot>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+
+</body>
+</html>

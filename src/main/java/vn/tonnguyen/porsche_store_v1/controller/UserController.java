@@ -6,12 +6,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vn.tonnguyen.porsche_store_v1.model.User;
+import vn.tonnguyen.porsche_store_v1.service.interf.OrderService;
 import vn.tonnguyen.porsche_store_v1.service.interf.UserService;
 
 @Controller
@@ -20,10 +18,12 @@ import vn.tonnguyen.porsche_store_v1.service.interf.UserService;
 public class UserController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
+    private final OrderService orderService;
 
-    public UserController(UserService userService, PasswordEncoder passwordEncoder) {
+    public UserController(UserService userService, PasswordEncoder passwordEncoder, OrderService orderService) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
+        this.orderService = orderService;
     }
 
     @GetMapping("/profile")
@@ -133,6 +133,33 @@ public class UserController {
         } catch (Exception e) {
             log.error("Error while updating user", e);
             model.addAttribute("errorMessage", "Error while changing password!");
+            return "error/error";
+        }
+    }
+
+    @GetMapping("/orders")
+    public String showOrders(
+            Model model,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        try {
+            Integer userId = userService.findByUsername(userDetails.getUsername()).getId();
+            model.addAttribute("orders", orderService.findByUserId(userId));
+            return "user/orders";
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Error while retrieving orders!");
+            return "error/error";
+        }
+    }
+
+    @GetMapping("orders/{id}")
+    public String showDetails(
+            Model model,
+            @PathVariable("id") Integer id) {
+        try {
+            model.addAttribute("orderDetail", orderService.findOrderDetailsWithCarByOrderId(id));
+            return "user/order-detail";
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Error while retrieving order details!");
             return "error/error";
         }
     }

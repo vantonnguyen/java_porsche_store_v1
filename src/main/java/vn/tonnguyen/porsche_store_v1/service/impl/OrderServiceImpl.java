@@ -1,5 +1,6 @@
 package vn.tonnguyen.porsche_store_v1.service.impl;
 
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vn.tonnguyen.porsche_store_v1.model.*;
@@ -12,6 +13,7 @@ import vn.tonnguyen.porsche_store_v1.service.interf.UserService;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Instant;
+import java.util.List;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -80,5 +82,15 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.save(order);
         cartService.deleteAllCartDetailsByCartId(cart.getId());
         return order;
+    }
+
+    @Override
+    public  List<Order> findByUserId(Integer userId) {
+        return orderRepository.findByUserId(userId);
+    }
+
+    @Override
+    public  List<OrderDetail> findOrderDetailsWithCarByOrderId(Integer orderId){
+        return orderRepository.findOrderDetailsWithCarByOrderId(orderId);
     }
 }

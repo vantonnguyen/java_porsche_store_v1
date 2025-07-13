@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{layout/header :: head('Orders')}"></head>
+<body>
+
+<div th:replace="~{layout/navbar :: navbar}"></div>
+
+<div th:if="${successMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+    <span th:text="${successMessage}"></span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+<div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+    <span th:text="${errorMessage}"></span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+<div th:if="${inforMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+    <span th:text="${inforMessage}"></span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+<div class="container my-4">
+    <div class="row">
+        <div class="col-lg-8">
+            <table class="table table-bordered table-sm align-middle">
+                <thead class="table-light">
+                <tr>
+                    <th class="text-center" style="width: 50px;">#</th>
+                    <th class="text-center" style="width: 100px;">Full Name</th>
+                    <th class="text-center" style="width: 100px;">Phone Number</th>
+                    <th class="text-end" style="width: 150px;">Address</th>
+                    <th class="text-end" style="width: 150px;">Payment Method</th>
+                    <th class="text-end" style="width: 150px;">Amount</th>
+                    <th class="text-end" style="width: 150px;">Status</th>
+                    <th class="text-end" style="width: 150px;">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="order,iterStat : ${orders}">
+                    <td class="text-center" th:text="${iterStat.index + 1}">1</td>
+                    <td class="text-center" th:text="${order.fullName}"></td>
+                    <td class="text-center" th:text="${order.phone}"></td>
+                    <td class="text-center" th:text="${order.shippingAddress}"></td>
+                    <td class="text-center" th:text="${order.paymentMethod}"></td>
+                    <td class="text-end"
+                        th:text="${#numbers.formatDecimal(order.finalAmount, 1, 'COMMA', 1, 'POINT')}">
+                        10,000.0
+                    </td>
+                    <td class="text-center" th:text="${order.status}"></td>
+                    <td class="text-center">
+                        <a th:href="@{/user/orders/{id}(id=${order.id})}" class="btn btn-primary me-2">Details</a>
+                    </td>
+                </tr>
+                </tbody>
+                <tfoot></tfoot>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+
+</body>
+</html>

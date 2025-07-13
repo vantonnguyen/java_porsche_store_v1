@@ -39,7 +39,7 @@ public class OrderDetail {
     private Order order;
 
     public BigDecimal getSubTotal() {
-        return getPrice().multiply(getPrice());
+        return this.price.multiply(BigDecimal.valueOf(this.quantity));
     }
 
 }
