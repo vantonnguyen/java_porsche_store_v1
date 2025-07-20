@@ -93,4 +93,14 @@ public class OrderServiceImpl implements OrderService {
     public  List<OrderDetail> findOrderDetailsWithCarByOrderId(Integer orderId){
         return orderRepository.findOrderDetailsWithCarByOrderId(orderId);
     }
+
+    @Override
+    public Order findById(Integer orderId) {
+        return orderRepository.findById(orderId).orElse(null);
+    }
+
+    @Override
+    public Order save(Order order) {
+        return orderRepository.save(order);
+    }
 }

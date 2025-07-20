@@ -58,8 +58,10 @@ public class OrderController {
             if(paymentMethod.equals("COD")) {
                 redirectAttributes.addFlashAttribute("successMessage", "Order placed successfully (COD).");
                 return "redirect:/cart";
+            } else {
+                return "redirect:/payment/create" + "?amount=" + order.getFinalAmount() + "&orderInfo=" + "Don hang co id la " + order.getId() + "&orderId=" +  + order.getId();
             }
-            return "redirect:/payment/vnpay?orderId=" + order.getId();
+
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             return "redirect:/cart";
