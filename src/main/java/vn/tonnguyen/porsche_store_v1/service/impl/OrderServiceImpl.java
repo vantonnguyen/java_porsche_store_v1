@@ -49,6 +49,7 @@ public class OrderServiceImpl implements OrderService {
         order.setShippingAddress(order_user.getAddress());
         order.setPaymentMethod(paymentMethod);
         order.setStatus(Order.Status.PENDING);
+        order.setPaymentStatus(Order.PaymentStatus.UNPAID);
         BigDecimal shippingFee = BigDecimal.ZERO;
         order.setShippingFee(shippingFee);
         BigDecimal totalAmount = BigDecimal.ZERO;

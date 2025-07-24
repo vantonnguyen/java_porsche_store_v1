@@ -26,59 +26,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public Map<String, String> processVNPayIPN(HttpServletRequest request) {
-        Map<String, String> fields = new HashMap<>();
-        request.getParameterMap().forEach((key, value) -> {
-            if (value.length > 0) fields.put(key, value[0]);
-        });
-        String vnpSecureHash = fields.remove("vnp_SecureHash");
-        fields.remove("vnp_SecureHashType");
-        Map<String, String> response = new HashMap<>();
-        try {
-            String signValue = VNPayUtil.hashAllFields(fields, secretKey);
-            if (!signValue.equals(vnpSecureHash)) {
-                response.put("RspCode", "97");
-                response.put("Message", "Invalid Checksum");
-                return response;
-            }
-            String vnpTxnRef = request.getParameter("vnp_TxnRef");
-            String vnpAmount = request.getParameter("vnp_Amount");
-            String vnpResponseCode = request.getParameter("vnp_ResponseCode");
-            Order order = orderService.findById(Integer.parseInt(vnpTxnRef));
-            if (order == null) {
-                response.put("RspCode", "01");
-                response.put("Message", "Order Not Found");
-                return response;
-            }
-            if (order.getStatus() == Order.Status.CONFIRMED) {
-                response.put("RspCode", "02");
-                response.put("Message", "Order Already Confirmed");
-                return response;
-            }
-            long amountFromVNPay = Long.parseLong(vnpAmount) / 100;
-            BigDecimal amount = new BigDecimal(amountFromVNPay);
-            if (amount != order.getFinalAmount()) {
-                response.put("RspCode", "04");
-                response.put("Message", "Invalid Amount");
-                return response;
-            }
-            if ("00".equals(vnpResponseCode)) {
-                order.setStatus(Order.Status.CONFIRMED);
-            } else {
-                order.setStatus(Order.Status.FAILED);
-            }
-            orderService.save(order);
-            response.put("RspCode", "00");
-            response.put("Message", "Confirm Success");
-        } catch (Exception e) {
-            response.put("RspCode", "99");
-            response.put("Message", "Unknown Error");
-        }
-        return response;
-    }
-
-    @Override
-    public String createVNPayPayment(long amount, String orderInfo, String orderId, String language, String ipAddr) {
+    public String createVNPayURL(long amount, String orderInfo, String orderId, String language, String ipAddr) {
         try {
             String vnp_TxnRef = orderId;
             String vnp_IpAddr = ipAddr;
@@ -109,4 +57,76 @@ public class PaymentServiceImpl implements PaymentService {
             return "Exception" + e.getMessage();
         }
     }
+
+    @Override
+    public String getResponseCode(HttpServletRequest request) {
+        Map<String, String> fields = new HashMap<>();
+        request.getParameterMap().forEach((key, value) -> {
+            if (value.length > 0) fields.put(key, value[0]);
+        });
+        String vnpSecureHash = fields.remove("vnp_SecureHash");
+        fields.remove("vnp_SecureHashType");
+        try {
+            String signValue = VNPayUtil.hashAllFields(fields, secretKey);
+            if (vnpSecureHash != null && vnpSecureHash.equals(signValue)) {
+                return fields.getOrDefault("vnp_ResponseCode", "Unknown");
+            } else {
+                return "02";
+            }
+        } catch (Exception e) {
+            return "99";
+        }
+    }
+
+    @Override
+    public Map<String, String> handelVNPayIPN(HttpServletRequest request) {
+        Map<String, String> fields = new HashMap<>();
+        request.getParameterMap().forEach((key, value) -> {
+            if (value.length > 0) fields.put(key, value[0]);
+        });
+        String vnpSecureHash = fields.remove("vnp_SecureHash");
+        fields.remove("vnp_SecureHashType");
+        Map<String, String> response = new HashMap<>();
+        try {
+            String signValue = VNPayUtil.hashAllFields(fields, secretKey);
+            if (!signValue.equals(vnpSecureHash)) {
+                response.put("RspCode", "97");
+                response.put("Message", "Invalid Checksum");
+                return response;
+            }
+            String vnpTxnRef = request.getParameter("vnp_TxnRef");
+            String vnpAmount = request.getParameter("vnp_Amount");
+            String vnpResponseCode = request.getParameter("vnp_ResponseCode");
+            Order order = orderService.findById(Integer.parseInt(vnpTxnRef));
+            if (order == null) {
+                response.put("RspCode", "01");
+                response.put("Message", "Order Not Found");
+                return response;
+            }
+            if (order.getStatus() == Order.Status.CONFIRMED) {
+                response.put("RspCode", "02");
+                response.put("Message", "Order Already Confirmed");
+                return response;
+            }
+            BigDecimal amount = BigDecimal.valueOf(Long.parseLong(vnpAmount)).divide(BigDecimal.valueOf(100));
+            if (amount != order.getFinalAmount()) {
+                response.put("RspCode", "04");
+                response.put("Message", "Invalid Amount");
+                return response;
+            }
+            if ("00".equals(vnpResponseCode)) {
+                order.setStatus(Order.Status.CONFIRMED);
+            } else {
+                order.setStatus(Order.Status.FAILED);
+            }
+            orderService.save(order);
+            response.put("RspCode", "00");
+            response.put("Message", "Confirm Success");
+        } catch (Exception e) {
+            response.put("RspCode", "99");
+            response.put("Message", "Unknown Error");
+        }
+        return response;
+    }
+
 }

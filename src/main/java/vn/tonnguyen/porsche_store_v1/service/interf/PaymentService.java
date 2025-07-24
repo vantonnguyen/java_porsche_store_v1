@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 public interface PaymentService {
-    Map<String, String> processVNPayIPN(HttpServletRequest request);
-    String createVNPayPayment(long amount, String orderInfo, String orderId, String language, String ipAddr);
+    String createVNPayURL(long amount, String orderInfo, String orderId, String language, String ipAddr);
+    Map<String, String> handelVNPayIPN(HttpServletRequest request);
+    String getResponseCode(HttpServletRequest request);
 }

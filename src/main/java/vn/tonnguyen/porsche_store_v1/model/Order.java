@@ -45,6 +45,15 @@ public class Order {
         PENDING, CONFIRMED, PROCESSING, SHIPPING, DELIVERED, COMPLETED, CANCELLED, FAILED, REFUNDED
     }
 
+    @ColumnDefault("'UNPAID'")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "payment_status")
+    private PaymentStatus paymentStatus;
+
+    public enum PaymentStatus {
+        UNPAID, SUCCESS, FAILED
+    }
+
     @Column(name = "full_name", nullable = false)
     private String fullName;
 

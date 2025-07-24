@@ -41,8 +41,7 @@ public class VNPayUtil {
         Collections.sort(fieldNames);
         StringBuilder hashData = new StringBuilder();
         StringBuilder query = new StringBuilder();
-        for (int i = 0; i < fieldNames.size(); i++) {
-            String fieldName = fieldNames.get(i);
+        for (String fieldName : fieldNames) {
             String fieldValue = vnp_Params.get(fieldName);
             if (fieldValue != null && !fieldValue.isEmpty()) {
                 hashData.append(fieldName)
@@ -51,7 +50,7 @@ public class VNPayUtil {
                 query.append(URLEncoder.encode(fieldName, StandardCharsets.US_ASCII.toString()))
                         .append("=")
                         .append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII.toString()));
-                if (i < fieldNames.size() - 1) {
+                if (!fieldName.equals(fieldNames.get(fieldNames.size() - 1))) {
                     hashData.append("&");
                     query.append("&");
                 }
@@ -59,7 +58,6 @@ public class VNPayUtil {
         }
         String vnp_SecureHash = hmacSha512(VNPayConfig.vnp_HashSecret, hashData.toString());
         query.append("&vnp_SecureHash=").append(vnp_SecureHash);
-        System.out.println(hashData.toString());
 
         return VNPayConfig.vnp_PayUrl + "?" + query.toString();
     }
@@ -74,7 +72,7 @@ public class VNPayUtil {
             if (fieldValue != null && !fieldValue.isEmpty()) {
                 hashData.append(fieldName)
                         .append("=")
-                        .append(fieldValue);
+                        .append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII.toString()));
             }
             if (!fieldName.equals(fieldNames.get(fieldNames.size() - 1))) {
                 hashData.append("&");
